@@ -1,5 +1,8 @@
 package de.htwg.se.poker.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /* A deck consists of 52 cards 
  * 
  * These cards are divided into four suits:
@@ -29,9 +32,9 @@ public class Deck {
 		}
 	}
 	
-	public void shuffleDeck() {
-		Collections.shuffle(getCards());
-	}
+	//public void shuffleDeck() {
+		//Collections.shuffle(getCards());
+	//}
 
 	public List<CreateCard> getCards() {
 		return cards;
