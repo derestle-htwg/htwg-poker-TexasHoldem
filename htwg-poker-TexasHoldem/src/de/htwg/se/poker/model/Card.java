@@ -1,4 +1,4 @@
-package de.htwg.se.poker.controller;
+package de.htwg.se.poker.model;
 
 /* A deck consists of 52 cards 
  * 
@@ -14,7 +14,7 @@ package de.htwg.se.poker.controller;
  * 
  */
 
-public class CreateCard
+public class Card
 {
 	
 	private final Suit SUIT;
@@ -37,7 +37,7 @@ public class CreateCard
 		ACE
 	}
 	
-	public CreateCard(Rank rank, Suit suit)
+	public Card(Rank rank, Suit suit)
 	{
 		this.RANK = rank;
 		this.SUIT = suit;
