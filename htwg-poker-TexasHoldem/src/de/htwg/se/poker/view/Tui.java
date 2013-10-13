@@ -27,7 +27,7 @@ public class Tui implements GameInterface{
 	{
 		DataInput = inStr;
 		DataOutput = outStr;
-		br= = new BufferedReader(new InputStreamReader(DataInput));
+		br = new BufferedReader(new InputStreamReader(DataInput));
 	}
 	
 	
@@ -43,7 +43,7 @@ public class Tui implements GameInterface{
 			tmpPly.name = readLine();
 			players.add(tmpPly);
 			
-			DataOutput.println("\nZusätzlichen Spieler? [j/n]");
+			DataOutput.println("\nZusï¿½tzlichen Spieler? [j/n]");
 			
 		}while(readLine().equalsIgnoreCase("j"));
 
