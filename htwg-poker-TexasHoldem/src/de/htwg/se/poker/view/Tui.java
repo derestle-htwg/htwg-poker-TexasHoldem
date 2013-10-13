@@ -1,5 +1,6 @@
 package de.htwg.se.poker.view;
 
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,6 +9,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.LinkedList;
 import java.util.List;
+import de.htwg.se.poker.model.*;
 
 import de.htwg.se.poker.controller.*;
 
@@ -30,7 +32,14 @@ public class Tui implements GameInterface{
 		br = new BufferedReader(new InputStreamReader(DataInput));
 	}
 	
-	
+	/**
+	 * show Table zeigt den aktuellen Tisch an. Wenn der Player null ist wird der gesammte Tisch angezeigt.
+	 * Wenn ein Player übergeben wird, wird der Tisch aus seiner Sicht angezeigt.
+	 * */
+	public void showTable(Table inTable, Player inPlayer)
+	{
+		
+	}
 
 	public List<Player> getNewPlayers()
 	{
@@ -49,6 +58,8 @@ public class Tui implements GameInterface{
 
 		return players;
 	}
+	
+	
 	
 	public int readInt()
 	{
