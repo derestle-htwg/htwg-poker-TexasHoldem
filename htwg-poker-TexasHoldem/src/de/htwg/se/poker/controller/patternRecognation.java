@@ -1,5 +1,5 @@
 package de.htwg.se.poker.controller;
-
+/* Showdown */
 public class patternRecognation {
 
 	 public int ComparePalyers(Player[] players)

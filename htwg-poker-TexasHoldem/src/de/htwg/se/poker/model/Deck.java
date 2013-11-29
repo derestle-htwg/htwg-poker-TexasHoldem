@@ -1,6 +1,7 @@
 package de.htwg.se.poker.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /* A deck consists of 52 cards 
@@ -19,33 +20,52 @@ import java.util.List;
 
 public class Deck {
 	
-	private final int DECK_SIZE = 52;
-	private final List<Card> cards;
-
+	private final int DECK_SIZE = 52; // Number of Cards on the Deck
+	private List<Cards> deck;
+	private Cards flop;
+	private List<Cards> flopList;
+	private final int FLOP_SIZE = 3;
+	
+	// Hier wird das Deck mit 52 Karten erzeugt
 	public Deck() {
-		cards = new ArrayList<Card>(DECK_SIZE);
-		
-		for (Card.Suit suit : Card.Suit.values()) {
-			for (Card.Rank rank : Card.Rank.values()) {
-				getCards().add(new Card(rank, suit));
+		deck = new ArrayList<Cards>(DECK_SIZE);
+		for (Cards.Suit suit : Cards.Suit.values()) {
+			for (Cards.Rank rank : Cards.Rank.values()) {
+				getCard().add(new Cards(rank, suit));
 			}
 		}
+		// Der Flop wird hiermit angelegt, aber leer
+		flopList = new ArrayList<Cards>(FLOP_SIZE);
+	}
+	/* mischt das Deck */
+	public void shuffleDeck() {
+		Collections.shuffle(deck);
 	}
 	
-	//public void shuffleDeck() {
-		//Collections.shuffle(getCards());
-	//}
+	// Gibt den Flop aus
+	public List<Cards> getFlop() {
+		shuffleDeck();
+		
+		for (int i = 0; i < 3; i++)
+		{
+			flop=deal();
+			flopList.add(flop);
+			
+			
+		}
+		return flopList;
+	}
 
-	public List<Card> getCards() {
-		return cards;
+	public List<Cards> getCard() {
+		return deck;
 	}
 	
-	public Card deal(){
-		return cards.remove(0);
-	}
 	
-	public void burn() {
-		cards.remove(0);
+	
+	/* nimmt eine Karte vom Deck, gibt diese aus 
+	 * und entfernt diese vom Deck */
+	public Cards deal(){
+		Cards card = deck.remove(0);
+		return card;
 	}
-
 }

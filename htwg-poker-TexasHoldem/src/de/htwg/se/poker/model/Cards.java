@@ -1,6 +1,6 @@
 package de.htwg.se.poker.model;
 
-/* A deck consists of 52 cards 
+/* One Card consists of: Suit + Rank 
  * 
  * These cards are divided into four suits:
  * 	(HEARTH, CLUB, DIAMOND, SPADE)
@@ -14,7 +14,7 @@ package de.htwg.se.poker.model;
  * 
  */
 
-public class Card
+public class Cards
 {
 	
 	private final Suit SUIT;
@@ -37,7 +37,7 @@ public class Card
 		ACE
 	}
 	
-	public Card(Rank rank, Suit suit)
+	public Cards(Rank rank, Suit suit)
 	{
 		this.RANK = rank;
 		this.SUIT = suit;
@@ -55,6 +55,6 @@ public class Card
 	
 	public String toString()
 	{
-		return " " + RANK + " " + SUIT + "\n";
+		return " " + SUIT + " " + RANK + "\n";
 	}
 }

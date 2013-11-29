@@ -27,7 +27,7 @@ public class Tui implements GameInterface{
 	{
 		DataInput = inStr;
 		DataOutput = outStr;
-		br= = new BufferedReader(new InputStreamReader(DataInput));
+		br = new BufferedReader(new InputStreamReader(DataInput));
 	}
 	
 	
