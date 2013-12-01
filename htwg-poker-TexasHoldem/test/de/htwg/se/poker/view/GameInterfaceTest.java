@@ -1,6 +1,6 @@
 package de.htwg.se.poker.view;
 
-import static org.junit.Assert.*;
+/*import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -11,4 +11,4 @@ public class GameInterfaceTest {
 		fail("Not yet implemented");
 	}
 
-}
+}*/

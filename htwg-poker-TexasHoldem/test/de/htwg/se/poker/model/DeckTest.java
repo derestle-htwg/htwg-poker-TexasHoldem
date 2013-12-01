@@ -1,4 +1,4 @@
-package de.htwg.se.poker.model;
+/*package de.htwg.se.poker.model;
 
 import static org.junit.Assert.*;
 
@@ -11,4 +11,4 @@ public class DeckTest {
 		fail("Not yet implemented");
 	}
 
-}
+}*/
