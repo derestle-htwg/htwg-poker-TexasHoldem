@@ -40,18 +40,6 @@ public class Poker {
 		System.out.println("small blind: " + dealB.getSmallBlind());
 		
 		
-		//System.out.println("\n"+ test.getCard());
-		//test.shuffleDeck();
-		//System.out.println("\n"+ test.getCard());
-		
-		/*for (int i = 0; i < 9; i++) {
-			System.out.println("\n"+ test.deal());
-		}
-	//	System.out.println("\n"+ test.getCard());
-		/*for (int i = 0; i < 40; i++)
-			test.deleteCard();
-		System.out.println("\n"+ test.getDeck());*/
-		
 		
 	}
 
