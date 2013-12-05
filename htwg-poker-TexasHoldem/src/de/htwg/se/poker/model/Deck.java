@@ -18,7 +18,7 @@ import java.util.List;
  * 
  */
 
-public class Deck {
+public class Deck implements TableElements{
 	
 	private final int DECK_SIZE = 52; // Number of Cards on the Deck
 	private List<Cards> deck;
@@ -26,46 +26,56 @@ public class Deck {
 	private List<Cards> flopList;
 	private final int FLOP_SIZE = 3;
 	
-	// Hier wird das Deck mit 52 Karten erzeugt
+	// Create the Deck with 52 cards
 	public Deck() {
 		deck = new ArrayList<Cards>(DECK_SIZE);
 		for (Cards.Suit suit : Cards.Suit.values()) {
 			for (Cards.Rank rank : Cards.Rank.values()) {
-				getCard().add(new Cards(rank, suit));
+				getDeckCards().add(new Cards(rank, suit));
 			}
 		}
-		// Der Flop wird hiermit angelegt, aber leer
+		// Create a empty Flop
 		flopList = new ArrayList<Cards>(FLOP_SIZE);
 	}
-	/* mischt das Deck */
+	
 	public void shuffleDeck() {
 		Collections.shuffle(deck);
 	}
 	
-	// Gibt den Flop aus
+	// The Flop contains the first tree Cards on the play
 	public List<Cards> getFlop() {
+		
 		shuffleDeck();
 		
 		for (int i = 0; i < 3; i++)
 		{
 			flop=deal();
 			flopList.add(flop);
-			
-			
 		}
 		return flopList;
 	}
 
-	public List<Cards> getCard() {
+	public List<Cards> getDeckCards() {
 		return deck;
 	}
 	
 	
-	
-	/* nimmt eine Karte vom Deck, gibt diese aus 
-	 * und entfernt diese vom Deck */
+	/* delete one Card from Deck and return this */
 	public Cards deal(){
 		Cards card = deck.remove(0);
 		return card;
 	}
+
+	@Override
+	public void setElementOnTable(Object obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Object getElementFromTable() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 }

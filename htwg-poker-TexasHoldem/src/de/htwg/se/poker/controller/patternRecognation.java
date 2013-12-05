@@ -1,4 +1,7 @@
 package de.htwg.se.poker.controller;
+
+import de.htwg.se.poker.model.Player;
+
 /* Showdown */
 public class patternRecognation {
 

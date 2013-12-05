@@ -1,11 +1,11 @@
-package de.htwg.se.poker.controller;
+package de.htwg.se.poker.model;
 
-import de.htwg.se.poker.model.Cards;
 
 public class Player {
 	/* Eigenschaften eines einzelnen Spielers*/
 	public String name;
-	final double CAPITAL = 400.00;
+	final double CAPITAL = 500.00;
+	
 	
 	/* reserviert Variable für die HoldCards, die er später vom GameMaster bekommt */
 	public Cards playerHoldCards;
