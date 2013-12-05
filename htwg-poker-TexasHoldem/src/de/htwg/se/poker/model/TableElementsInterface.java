@@ -1,6 +1,6 @@
 package de.htwg.se.poker.model;
 
-public interface TableElements {
+public interface TableElementsInterface {
 	public void setElementOnTable(Object obj);
-	public Object getElementFromTable();
+	public Object getTableElement();
 }

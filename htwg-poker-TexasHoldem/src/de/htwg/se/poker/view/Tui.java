@@ -9,8 +9,7 @@ import java.io.PrintStream;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.htwg.se.poker.controller.*;
-import de.htwg.se.poker.model.Player;
+import de.htwg.se.poker.model.*;
 
 public class Tui implements GameInterface{
 	
@@ -30,8 +29,6 @@ public class Tui implements GameInterface{
 		DataOutput = outStr;
 		br = new BufferedReader(new InputStreamReader(DataInput));
 	}
-	
-	
 
 	public List<Player> getNewPlayers()
 	{
@@ -39,7 +36,7 @@ public class Tui implements GameInterface{
 		
 		do{
 			Player tmpPly = new Player();
-			DataOutput.println("Name des " + players.size() + ". Spielers: ");
+			DataOutput.println("Name des " + (players.size()+1) + ". Spielers: ");
 			
 			tmpPly.name = readLine();
 			players.add(tmpPly);

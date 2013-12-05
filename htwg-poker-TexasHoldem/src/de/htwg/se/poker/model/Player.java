@@ -1,23 +1,27 @@
 package de.htwg.se.poker.model;
 
-
 public class Player {
 	/* Eigenschaften eines einzelnen Spielers*/
 	public String name;
-	final double CAPITAL = 500.00;
-	
-	
-	/* reserviert Variable für die HoldCards, die er später vom GameMaster bekommt */
-	public Cards playerHoldCards;
-	
-	/* Für das auswerten in patternRecognation, wenn das Spiel zu Ende ist*/
-	public Cards playerBlat;
-	
-	double initCapital;
-	
+	private String namePlayer;
+	private double playerInitCapital;
+	Table playerTable;
+		
 	/* Hier hat der Spieler die Möglichkeit Sein Guthaben zu erhöhen,
 	 * falls er kein Geld mehr hat */
-	public void increaseCapital() {
-		
+	
+	
+	public String getPlayerName() {
+		namePlayer = "robert";
+		return namePlayer;
+	}
+	
+	public Double getPlayerInitCapital() {
+		playerInitCapital = 500.00;
+		return playerInitCapital;
+	}
+	
+	public void setPlayerInitCapital(double capital) {
+		System.out.printf("Ihr aktuellen ChipStand beträgt: %d €\n\n", capital);
 	}
 }
