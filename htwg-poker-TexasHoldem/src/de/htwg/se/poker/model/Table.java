@@ -1,256 +1,352 @@
 package de.htwg.se.poker.model;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
-import de.htwg.se.poker.view.Tui;
 public class Table {
 
-	//static List<Karten> middleCard;
+	public TableElements tableElem;
+	public Object[][] tableArray;
+	int index = 0;
 	
-	Deck deck;
-	Tui tui;
-	int cardNbr;
-	Player player;
-	List<Player> playersList;
-	
-	private Cards flop;
-	private List<Cards> flopList;
-	
-	public Cards flopCard1;
-	public Cards flopCard2;
-	public Cards flopCard3;
-	
-	public Cards turnCard;
-	public Cards riverCard;
-	
-	private List<Cards> middleCards;
-	
-	public Cards userHoldCard1;
-	public Cards userHoldCard2;
-	
-	public Cards compHoldCard1;
-	public Cards compHoldCard2;
-	
-	List<Cards> playerHoldCards;
-			
-	double startCapital = 500.00;
-	double pot = 0.0;
-	
-	String dealButton;
-	String bigBlind = "bB";
-	String smallBlind = "sB";
-	int bigBlindWert = 4;
-	int smallBlindWert = bigBlindWert/2;
-	String userName = "USER";
-	String compName = "MacPro";
-	
-	//Optionen
-	boolean fold = false; // aussteigen
-	boolean call = false; // mitgehen
-	boolean raise = false;// erhoehen
-	boolean check = false;// passen
-	int callValue;
-	int raiseValue;
-			
-	int roundNbr;
-	String[][] tableArrayPattern;
-	TableElementsInterface[][] table;
-	
-	
-	// Konstruktor
 	public Table() {
-		this.tableArrayPattern = 
-			      new String[][] {
-			         { "x","xx","xx","xxxxxxxxxxxxx","xx","xx","xx","xxxxxxxxxxxxx","xx","xxxxxxxx","xx","xxxxxxxxxxxxx","xx","xx","xx","xxxxxxxxxxxxx","xx","xxxxxx","xxxx","xxxxxxxxxxxxx","xx","xx","xx","xxxxxxxxxxxxx","xx","xxx" }, 
-			         { "x","  ","  ","             ","  ","  ","  ","             ","  ","        ","  ","             ","  ","  ","  ","             ","  ","      ","    ","             ","  ","  ","  ","             ","  ","  x" },
-			         { "x","  ","**","*************","**","  ","**","*************","**","        ","**","*************","**","  ","**","*************","**","        ","**","*************","**","  ","**","*************","**","  x" },
-			         { "x","  ","* ","Pl1-HoldCard1"," *","  ","* ","Pl1-HoldCard2"," *","        ","* ","Pl2-HoldCard1"," *","  ","* ","Pl2-HoldCard2"," *","        ","* ","Pl3-HoldCard1"," *","  ","* ","Pl3-HoldCard2"," *","  x" },
-			         { "x","  ","**","*************","**","  ","**","*************","**","        ","**","*************","**","  ","**","*************","**","        ","**","*************","**","  ","**","*************","**","  x" },
-			         { "x","    ","Player1-Name","   ","Capital:"," ","500,00"," ","Û","            ","Player2-Name","   ","Capital:"," ","500,00"," ","Û","            ","Player3-Name","   ","Capital:"," ","500,00"," ","Û","    x" }, 
-			         { "x     ","-","----","-  -","----","-  -","-----","-    ","                 ","-","----","-  -","----","-  -","-----","-    ","                 ","-","----","-  -","----","-  -","-----","-    ","        ","x" },
-			         { "x     ","|","Fold","|  |","Call","|  |","raise","|    ","DB               ","|","Fold","|  |","Call","|  |","raise","|    ","DB               ","|","Fold","|  |","Call","|  |","raise","|    ","DB      ","x" },
-			         { "x     ","-","----","-  -","----","-  -","-----","-    ","                 ","-","----","-  -","----","-  -","-----","-    ","                 ","-","----","-  -","----","-  -","-----","-    ","        ","x" },
-			         { "x","      ","     ","    ","  ","             ","  ","   ","  ","             ","  ","   ","  ","             ","  ","   ","  ","             ","  ","   ","  ","             ","  ","       ","         ","x" },
-			         { "x","      ","     ","    ","  ","             ","  ","   ","  ","             ","  ","   ","  ","             ","  ","   ","  ","             ","  ","   ","  ","             ","  ","       ","         ","x" },
-			         { "x","      ","     ","    ","  ","             ","  ","   ","  ","             ","  ","   ","  ","             ","  ","   ","  ","             ","  ","   ","  ","             ","  ","       ","         ","x" },
-			         { "x","      ","     ","    ","**","*************","**","   ","**","*************","**","   ","**","*************","**","   ","**","*************","**","   ","**","*************","**","       ","         ","x" },
-			         { "x","      ","     ","    ","* "," FlopCard 1  "," *","   ","* "," FlopCard 2  "," *","   ","* "," FlopCard 3  "," *","   ","* ","  TurnCard   "," *","   ","* ","  RiverCard  "," *","       ","         ","x" },
-			         { "x","      ","     ","    ","**","*************","**","   ","**","*************","**","   ","**","*************","**","   ","**","*************","**","   ","**","*************","**","       ","         ","x" },
-			         { "x","      ","     ","    ","  ","             ","  ","   ","  ","             ","  ","   ","  ","             ","  ","   ","  ","             ","  ","   ","  ","             ","  ","       ","         ","x" },
-			         { "x","      ","     ","    ","  ","             ","  ","   ","  ","             ","  ","   ","  ","Pot: ","0000,00"," Û","      ","             ","  ","   ","  ","             ","  ","       ","         ","x" }, 
-			         { "x","      ","     ","    ","  ","             ","  ","   ","  ","             ","  ","   ","  ","             ","  ","   ","  ","             ","  ","   ","  ","             ","  ","       ","         ","x" },
-			         { "x","      ","     ","    ","  ","             ","  ","   ","  ","             ","  ","   ","  ","             ","  ","   ","  ","             ","  ","   ","  ","             ","  ","       ","         ","x" },
-			         { "x","      ","     ","    ","  ","             ","  ","   ","  ","             ","  ","   ","  ","             ","  ","   ","  ","             ","  ","   ","  ","             ","  ","       ","         ","x" },
-			         { "x","      ","     ","    ","  ","             ","  ","   ","  ","             ","  ","   ","  ","             ","  ","   ","  ","             ","  ","   ","  ","             ","  ","       ","         ","x" },
-			         { "x     ","-","----","-  -","----","-  -","-----","-    ","                 ","-","----","-  -","----","-  -","-----","-    ","                 ","-","----","-  -","----","-  -","-----","-    ","        ","x" },
-			         { "x     ","|","Fold","|  |","Call","|  |","raise","|    ","DB               ","|","Fold","|  |","Call","|  |","raise","|    ","DB               ","|","Fold","|  |","Call","|  |","raise","|    ","DB      ","x" },
-			         { "x     ","-","----","-  -","----","-  -","-----","-    ","                 ","-","----","-  -","----","-  -","-----","-    ","                 ","-","----","-  -","----","-  -","-----","-    ","        ","x" },
-			         { "x","    ","Player4-Name","   ","Capital:"," ","500,00"," ","Û","            ","Player5-Name","   ","Capital:"," ","500,00"," ","Û","            ","Player6-Name","   ","Capital:"," ","500,00"," ","Û","    x" },
-			         { "x","  ","**","*************","**","  ","**","*************","**","        ","**","*************","**","  ","**","*************","**","        ","**","*************","**","  ","**","*************","**","  x" },
-			         { "x","  ","* ","Pl4-HoldCard1"," *","  ","* ","Pl4-HoldCard2"," *","        ","* ","Pl5-HoldCard1"," *","  ","* ","Pl5-HoldCard2"," *","        ","* ","Pl6-HoldCard1"," *","  ","* ","Pl6-HoldCard2"," *","  x" },
-			         { "x","  ","**","*************","**","  ","**","*************","**","        ","**","*************","**","  ","**","*************","**","        ","**","*************","**","  ","**","*************","**","  x" },
-			         { "x","  ","  ","             ","  ","  ","  ","             ","  ","        ","  ","             ","  ","  ","  ","             ","  ","      ","    ","             ","  ","  ","  ","             ","  ","  x" },
-			         { "x","xx","xx","xxxxxxxxxxxxx","xx","xx","xx","xxxxxxxxxxxxx","xx","xxxxxxxx","xx","xxxxxxxxxxxxx","xx","xx","xx","xxxxxxxxxxxxx","xx","xxxxxx","xxxx","xxxxxxxxxxxxx","xx","xx","xx","xxxxxxxxxxxxx","xx","xxx" },
-			       };
-		
-		this.deck = new Deck(); // create a Deck with 52 Cards
-		this.player = new Player(); // create a player with name and initCapital
-		this.playerHoldCards = new LinkedList<Cards>();
-		this.middleCards = new LinkedList<Cards>();
-		this.tui = new Tui();
-		this.playersList = new LinkedList<Player>();
-		this.flopList = new LinkedList<Cards>();
+		this.tableElem = new TableElements();
+		this.tableArray = new Object[30][27];
+		tableElem.cardsElements.setMiddleCards();
 	}
 	
-	public List<Cards> getDeckOfKonsole() {
-		return deck.getDeckCards();
-	}
 	
-	public void getDeckSize() {
-		System.out.println(deck.getDeckSize());
-	}
-	
-	public void setPlayerOfKonsole() {
-		System.out.println(player.name);
-		System.out.println(player.getPlayerName());
-		System.out.println(player.getPlayerInitCapital());
-	}
-	
-	public void fillTable() {
-				
-		for (int row = 0; row < tableArrayPattern.length; row++ )
+	public void setTableComponents(int round)
+	{
+		for (int row = 0; row < tableArray.length; row++)
 	    {
-	      for (int col = 0; col < tableArrayPattern[row].length; col++ )
+	      for (int col = 0; col < tableArray[row].length; col++)
 	      {
-	    	 System.out.print(tableArrayPattern[row][col]);
-	      }
-	      System.out.println(); 
-	    }	
-	}
-	
-	@SuppressWarnings("unchecked")
-	public void setFlop() {
-		deck.shuffleDeck();
-		if (flopList.isEmpty() && middleCards.isEmpty())
-		{
-			for (int i = 0; i < 3; i++)
-			{
-				flop=deck.deal();
-				flopList.add(flop);
-				if (i == 0) flopCard1 = flop;
-				else if (i == 1) flopCard2 = flop;
-				else flopCard3 = flop;
-			}
-			middleCards = (List<Cards>) ((LinkedList<Cards>) flopList).clone();
-		}
-		else
-			System.out.println("flop already exits!");
-	}
-	
-	public List<Cards> getFlop() {
+	    	    	  
+	    	  if (row == 2 || row == 4 || row == 25 || row == 27)
+	    		  setBorderOfHoldCardsField(row, col);
+	    	  
+	    	  else if (row == 3 || row == 26)
+	    		  setHoldCards(row, col, round);	    	 
+	    	  
+	    	  else if (row == 5 || row == 24)	    	  
+	    		  setPlayerData(row, col, round);
+	    	  
+	    	  else if (row == 6 || row == 8 || row == 21 || row == 23)
+	    		  setCheckBoxBorder(row, col);
+	    	  
+	    	  else if (row == 7 || row == 22)
+	    		  setCheckBox(row, col, round);
+	    	  
+	    	  else if (row == 12 || row == 14)
+	    		  setBorderOfMiddleCardsField(row, col);
+	    	  
+	    	  else if (row == 13)
+	    		  setMiddlecardsOnTheTable(row, col, index, round);
+	    	  
+	    	  else if (row == 16)
+	    		  setPotValue(row, col, round);	    	
+	    	  
+	    	  else if (row == 0 || row == 29)	    	  
+	    		  tableArray[row][col] = "#####";	    	  
+	    	  
+	    	  else  
+	    		  setFreeCells(row, col);
+	      }	      
+	    }
 		
-		if (flopList.isEmpty())
-		{
-			System.out.println("Flop is empty!");
-			return null;
-		}
-		
-		return flopList;
+		fillTable();
 	}
-	
-	public void setTurn() {
-		if (middleCards.isEmpty())
-		{
-			System.out.println("Not possible to create the Turn! middleCards is empty!!");
-		}
-		else if (middleCards.size() == 3)
-		{
-			deck.shuffleDeck();
-			middleCards.add(turnCard = deck.deal());
-		}
-		else
-			System.out.println("The turn already exists!!");
 
-	}
-	public Cards getTurn() {
-		
-		if (!middleCards.contains(turnCard))
-		{
-			System.out.printf("MiddleCards contains turn: %o \n", turnCard);
-			return null;
-		}
-		else
-			return turnCard;
-	}
-	
-	public void setRiver() {
-		
-	if (middleCards.isEmpty())
+	private void setFreeCells(int row, int col)
 	{
-		System.out.println("Not possible to create the River! middleCards is empty!!");
-	}
-	else if (middleCards.size() == 4)
-	{
-		deck.shuffleDeck();
-		middleCards.add(riverCard = deck.deal());
-	}
-	else
-		System.out.println("The river already exists!!");
-}
-
-public Cards getRiver() {
+		if (col == 0)
+			tableArray[row][col] = "#    ";
 		
-		if (!middleCards.contains(riverCard))
-		{
-			System.out.printf("MiddleCards contains turn: %o \n", riverCard);
-			return null;
-		}
+		else if (col == 26)
+			tableArray[row][col] = "    #";
+		
 		else
-			return riverCard;
+			tableArray[row][col] = "     ";
 	}
 	
-	public List<Cards> getMiddleCards() {
+	private void setBorderOfHoldCardsField(int row, int col)
+	{
+		if (col == 0 || col == 26)		
+			tableArray[row][col] = "#";	
 		
-		if (middleCards.isEmpty())
-			System.out.println("The middlecards are not created!!");
-		return middleCards;
+		else if (col == 1)
+			tableArray[row][col] = "    ";
+		
+		else if (col == 2 || col == 4 || col == 6 || col == 8 || 
+				 col == 10 || col == 12 || col == 14 || col == 16 ||
+				 col == 18 || col == 20 || col == 22 || col == 24)
+			
+			tableArray[row][col] = "**";
+				
+		
+		else if (col == 3 || col == 7 || col == 11 || 
+				 col == 15 || col == 19 || col == 23)
+		
+			tableArray[row][col] = "*************";
+		
+		
+		else if (col == 5 || col == 13 || col == 21)
+			tableArray[row][col] = "  ";
+				
+		else if  (col == 9 || col == 17)		
+   			tableArray[row][col] = "        ";			
+				
+		else		
+			tableArray[row][col] = "     ";
+		
 	}
 	
-	 public List<Cards> getPlayerHoldCards() {
-		 
-		 for (int i = 0; i > 2; i++)
-		 {
-			 playerHoldCards.add(deck.deal());
-			 System.out.println(playerHoldCards);
-		 }
-		 
-		 return playerHoldCards;
-	 }
-	 
-	 public List<Player> getPlayerList() {
-		 playersList = tui.getNewPlayers();
-		 for (Iterator<Player> iterator = tui.getNewPlayers().iterator(); iterator.hasNext();)
+	private void setHoldCards(int row, int col, int round)
+	{
+		if (col == 0 || col == 26)
+			tableArray[row][col] = "#";
+		
+		else if (col == 1)
+			tableArray[row][col] = "    ";
+		
+		else if (col == 2 || col == 6 || col == 10 || 
+				 col == 14 || col == 18 || col == 22)
+			
+			tableArray[row][col] = "* ";
+		
+		
+		else if (col == 4 || col == 8 || col == 12 || 
+				 col == 16 || col == 20 || col == 24)
+			
+			tableArray[row][col] = " *";
+		
+		
+		else if (col == 3 || col == 7 || col == 11 || 
+				 col == 15 || col == 19 || col == 23)
+		{
+			if (round == 0)
+				tableArray[row][col] = "  HoldCard   ";
+			else
+				tableArray[row][col] = tableElem.cardsElements.getCard();
+		}
+		
+		else if (col == 5 || col == 13 || col == 21)
+			tableArray[row][col] = "  ";
+		
+		else if  (col == 9 || col == 17)
+   			tableArray[row][col] = "        ";			
+		
+		else
+			tableArray[row][col] = "     ";
+	}
+	
+	private void setBorderOfMiddleCardsField(int row, int col)
+	{		
+		if (col == 0 || col == 26)
+			tableArray[row][col] = "#";
+		
+		else if ( col == 1 || col == 2 || col == 3 ||
+				  col == 23 || col == 24 || col == 25)
+			
+			tableArray[row][col] = "      ";
+	
+		
+		else if ( col == 4 || col == 6 || col == 8 || col == 10 || 
+				  col == 12 || col == 14 || col == 16 || col == 18 ||
+				  col == 20 || col == 22 )
+			
+			tableArray[row][col] = "**";		
+		
+		
+		else if ( col == 5 || col == 9 || col == 13 || col == 17 || col == 21 )
+			tableArray[row][col] = "*************";
+				
+		else if  (col == 7 || col == 11 || col == 15 || col == 19)		
+   			tableArray[row][col] = "   ";					
+	}
+
+	private void setMiddlecardsOnTheTable(int row, int col, int ind, int round)
+	{
+		if (col == 0 || col == 26)		
+			tableArray[row][col] = "#";
+				
+		else if ( col == 1 || col == 2 || col == 3 ||
+				  col == 23 || col == 24 || col == 25)
+		
+			tableArray[row][col] = "      ";
+
+		
+		else if (col == 4 || col == 8 || col == 12 || 
+				 col == 16 || col == 20)
+		
+			tableArray[row][col] = "* ";
+	
+		
+		else if (col == 6 || col == 10 || col == 14 || 
+				 col == 18 || col == 22)
+		
+			tableArray[row][col] = " *";
+
+		
+		else if (col == 5 || col == 9 || col == 13 || 
+				 col == 17 || col == 21)
+		{
+			if (round == 0)			
+				tableArray[row][col] = "  MiddleCard ";
+						
+			else 
 			{
-				System.out.println(iterator.next());
+				if (ind < 5)
+				{
+					tableArray[row][col] = tableElem.cardsElements.getMiddleCards().get(index);
+					++index;
+				}
 			}
-			System.out.println();
-		 return playersList; // contains allocation of list with players names
-	 }
-	 
-	public void getCell() {
-		System.out.print(tableArrayPattern[13][5]);
-	}
-	
-	public void setPotvalue() {
+		}
 		
+		else if  (col == 7 || col == 11 || col == 15 || col == 19)		
+   			tableArray[row][col] = "   ";					
 	}
-	
-	public void setUserStartCapital() {
 		
+	private void setPlayerData(int row, int col, int round)
+	{
+		if (col == 0 || col == 26)
+			tableArray[row][col] = "#";
+				
+		else if (col == 1)		
+			tableArray[row][col] = "      ";
+				
+		else if (col == 2 || col == 10 || col == 18)
+		{
+			if (round == 0)
+				tableArray[row][col] = " Empty-Seat ";
+			else
+			tableArray[row][col] = "Player-Name ";
+		}
+		
+		else if (col == 4 || col == 12 || col == 20)		
+			tableArray[row][col] = "Capital:";		
+		
+		else if (col == 3 || col == 11 || col == 19)		
+			tableArray[row][col] = "  ";		
+		
+		else if (col == 5 || col == 7 || col == 13 || 
+				 col == 15 || col == 21 || col == 23)
+		
+   			tableArray[row][col] = " ";					
+		
+		
+		else if (col == 6 || col == 14 || col == 22)		
+			tableArray[row][col] = "500.00";
+				
+		else if (col == 8 || col == 16 || col == 24)		
+			tableArray[row][col] = "Û";
+				
+		else if (col == 9 || col == 17)		
+			tableArray[row][col] = "             ";
+				
+		else		
+			tableArray[row][col] = "        ";
 	}
 	
+	private void setCheckBoxBorder(int row, int col)
+	{
+		if (col == 0 || col == 26)		
+			tableArray[row][col] = "#";
+				
+		else if (col == 1)		
+			tableArray[row][col] = "       ";		
+		
+		else if (col == 2 || col == 10 || col == 18)		
+			tableArray[row][col] = "-";
+				
+		else if ( col == 3 || col == 5 || col == 7 ||  
+				  col == 11 || col == 13 || col == 15 ||
+				  col == 19 || col == 21 || col == 23 )
+		
+			tableArray[row][col] = "-----";
+		
+		
+		else if (col == 4 || col == 6 || col == 12 || 
+				 col == 14 || col == 20 || col == 22)
+		
+			tableArray[row][col] = "-  -";
+		
+		
+		else if  (col == 8 || col == 16 || col == 24)		
+   			tableArray[row][col] = "-  ";			
+				
+		else if (col == 9 || col == 17)		
+			tableArray[row][col] = "                  ";
+				
+		else		
+			tableArray[row][col] = "         ";		
+	}
+		
+	private void setCheckBox(int row, int col, int round)
+	{
+		if (col == 0 || col == 26)		
+			tableArray[row][col] = "#";
+				
+		else if (col == 1)		
+			tableArray[row][col] = "       ";
+				
+		else if (col == 2 || col == 10 || col == 18)		
+			tableArray[row][col] = "-";
+		
+		else if (col == 3 || col == 5 || col == 7 ||  
+				 col == 11 || col == 13 || col == 15 ||
+				 col == 19 || col == 21 || col == 23)
+		
+			tableArray[row][col] = " OPT ";
+		
+		else if (col == 4 || col == 6 || col == 12 || 
+				 col == 14 || col == 20 || col == 22)
+			
+			tableArray[row][col] = "-  -";
+		
+		
+		else if  (col == 8 || col == 16 || col == 24)		
+   			tableArray[row][col] = "-  ";			
+		
+		
+		else if (col == 9 || col == 17)		
+			tableArray[row][col] = " DB               ";
+		
+		
+		else		
+			tableArray[row][col] = " DB      ";		
+	}
+		
+	private void setPotValue(int row, int col, int round)
+	{
+		if (col == 0 || col == 26)
+			tableArray[row][col] = "#";
+		
+		else if (col == 13)
+			tableArray[row][col] = "Pot: ";
+		
+		else if (col == 14)
+			tableArray[row][col] = "0000.00";
+		
+		else if (col == 15)
+			tableArray[row][col] = " Û";
+		
+		else if (col == 25)
+			tableArray[row][col] = "              ";
+		
+		else
+			tableArray[row][col] = "     ";
+	}
+	
+	
+	private void fillTable()
+	{
+		for (int row = 0; row < tableArray.length; row++ )
+	    {
+	      for (int col = 0; col < tableArray[row].length; col++ )
+	      {
+	    	 System.out.print(tableArray[row][col]);    	  
+	      } 
+	      System.out.println();
+	    }
+	}
 }
-
-

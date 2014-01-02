@@ -1,6 +1,6 @@
 package de.htwg.se.poker.model;
 
-public class DealButton implements TableElementsInterface {
+public class DealButton {
 
 	static int limit=2;
 	static int smallBlind=0;
@@ -28,17 +28,5 @@ public class DealButton implements TableElementsInterface {
 	public int getBigBlind() {
 		setBigBlind();
 		return bigBlind;
-	}
-
-	@Override
-	public void setElementOnTable(Object obj) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Object getTableElement() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

@@ -18,17 +18,17 @@ import java.util.List;
  * 
  */
 
-public class Deck implements TableElementsInterface{
+public class Deck {
 	
-	private List<Cards> deck;
+	private List<Card> deck;
 	
 	
 	// Create the Deck with 52 cards
 	public Deck() {
-		deck = new LinkedList<Cards>();
-		for (Cards.Suit suit : Cards.Suit.values()) {
-			for (Cards.Rank rank : Cards.Rank.values()) {
-				getDeckCards().add(new Cards(rank, suit));
+		deck = new LinkedList<Card>();
+		for (Card.Suit suit : Card.Suit.values()) {
+			for (Card.Rank rank : Card.Rank.values()) {
+				getDeckCards().add(new Card(rank, suit));
 			}
 		}
 	}
@@ -38,7 +38,7 @@ public class Deck implements TableElementsInterface{
 	}
 	
 	// The Flop contains the first tree Cards on the play
-	public List<Cards> getDeckCards() {
+	public List<Card> getDeckCards() {
 		return deck;
 	}
 	
@@ -48,21 +48,8 @@ public class Deck implements TableElementsInterface{
 	
 	
 	/* delete one Card from Deck and return this */
-	public Cards deal(){
-		Cards card = deck.remove(0);
+	public Card deal(){
+		Card card = deck.remove(0);
 		return card;
 	}
-
-	@Override
-	public void setElementOnTable(Object obj) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Object getTableElement() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 }
