@@ -2,12 +2,22 @@ package de.htwg.se.poker.model;
 
 public class TableElements {
 
-public CardsElements cardsElements;
+	private CardsElements cardsElements;
 	
 
 	// Konstruktor
 	public TableElements() {
 	
-		this.cardsElements = new CardsElements();
+		setCardsElements(new CardsElements());
+	}
+
+
+	public CardsElements getCardsElements() {
+		return cardsElements;
+	}
+
+
+	public void setCardsElements(CardsElements cardsElements) {
+		this.cardsElements = cardsElements;
 	}
 }

@@ -8,7 +8,7 @@ public class Poker {
 	{
 		Table table = new Table();
 		
-		table.tableElem.cardsElements.setMiddleCards();
+		table.tableElem.getCardsElements().setMiddleCards();
 		
 		int round = 0;
 		round++;
