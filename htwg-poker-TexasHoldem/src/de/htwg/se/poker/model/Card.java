@@ -2,8 +2,8 @@ package de.htwg.se.poker.model;
 
 public class Card {
 	
-	private final Suit SUIT;
-	private final Rank RANK;
+	private Suit suit;
+	private Rank rank;
 	
 	public enum Suit
 	{
@@ -24,24 +24,24 @@ public class Card {
 	
 	public Card(Rank rank, Suit suit)
 	{
-		this.RANK = rank;
-		this.SUIT = suit;
+		this.rank = rank;
+		this.suit = suit;
 	}
 	
 	public Rank getRank()
 	{
-		return RANK;
+		return rank;
 	}
 	
 	public Suit getSuit()
 	{
-		return SUIT;
+		return suit;
 	}
 	
 	@Override
 	public String toString()
 	{
-		StringBuilder s = new StringBuilder (SUIT + " " + RANK);
+		StringBuilder s = new StringBuilder (suit + " " + rank);
 		for (@SuppressWarnings("unused") int i = 0; s.length() < 13; i++)
 		{
 			s.append(" ");

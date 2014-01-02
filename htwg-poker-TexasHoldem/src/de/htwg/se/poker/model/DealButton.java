@@ -2,9 +2,9 @@ package de.htwg.se.poker.model;
 
 public class DealButton {
 
-	static int limit=2;
-	static int smallBlind=0;
-	static int bigBlind=0;
+	private static int limit=2;
+	private static int smallBlind=0;
+	private static int bigBlind=0;
 	
 	DealButton() {
 		limit = 2;

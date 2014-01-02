@@ -4,20 +4,20 @@ public class TableElements {
 
 	private CardsElements cardsElements;
 	
-
-	// Konstruktor
-	public TableElements() {
-	
+	public TableElements()
+	{
 		setCardsElements(new CardsElements());
 	}
 
 
-	public CardsElements getCardsElements() {
+	public CardsElements getCardsElements()
+	{
 		return cardsElements;
 	}
 
 
-	public void setCardsElements(CardsElements cardsElements) {
+	public void setCardsElements(CardsElements cardsElements)
+	{
 		this.cardsElements = cardsElements;
 	}
 }

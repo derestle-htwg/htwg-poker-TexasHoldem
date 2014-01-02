@@ -6,13 +6,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class CardsElements {
-private List<Card> deck;
+	private List<Card> deck;
 	
 	private Card flopCard;
 	private List<Card> flopList;
 	
-	public Card turnCard;
-	public Card riverCard;
+	private Card turnCard;
+	private Card riverCard;
 	
 	private List<Card> middleCards;
 	
@@ -48,8 +48,7 @@ private List<Card> deck;
 	public Card getCard()
 	{
 		shuffleDeck();
-		Card card = deck.remove(0);
-		return card;
+		return deck.remove(0);
 	}
 	
 	private void setFlop()
@@ -63,14 +62,18 @@ private List<Card> deck;
 			}
 		}
 		else
+		{
 			System.out.println("flop already exits!");
+		}
 	}
 	
 	public List<Card> getFlop()
 	{
 		if (flopList.isEmpty())
+		{
 			setFlop();
-		
+		}
+			
 		return flopList;
 	}
 	

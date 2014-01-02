@@ -5,10 +5,12 @@ public class Table {
 	public TableElements tableElem;
 	private Object[][] tableArray;
 	private int index = 0;
+	private final int TABLE_ROW = 30;
+	private final int TABLE_COLUMN = 27;
 	
 	public Table() {
 		this.tableElem = new TableElements();
-		this.tableArray = new Object[30][27];
+		this.tableArray = new Object[TABLE_ROW][TABLE_COLUMN];
 		tableElem.getCardsElements().setMiddleCards();
 	}
 	
@@ -145,17 +147,29 @@ public class Table {
 			tableArray[row][col] = "    ";
 		}
 		
-		else if (col == 2 || col == 4 || col == 6 || col == 8 || 
-				 col == 10 || col == 12 || col == 14 || col == 16 ||
-				 col == 18 || col == 20 || col == 22 || col == 24)
+		else if (col == 2 || col == 6 || col == 10 || 
+				 col == 14 || col == 18 || col == 22)
 		{
-			tableArray[row][col] = "**";
+			tableArray[row][col] = "* ";
+		}
+		
+		else if (col == 4 || col == 8 || col == 12 || 
+				 col == 16 || col == 20 || col == 24)
+		{
+			tableArray[row][col] = " *";
 		}
 		
 		else if (col == 3 || col == 7 || col == 11 || 
 				 col == 15 || col == 19 || col == 23)
 		{
-			tableArray[row][col] = "*************";
+			if (round == 0)
+			{
+				tableArray[row][col] = "  HoldCard   ";
+			}
+			else
+			{
+				tableArray[row][col] = tableElem.getCardsElements().getCard();
+			}
 		}
 		
 		else if (col == 5 || col == 13 || col == 21)
@@ -269,9 +283,13 @@ public class Table {
 		else if (col == 2 || col == 10 || col == 18)
 		{
 			if (round == 0)
+			{
 				tableArray[row][col] = " Empty-Seat ";
+			}
 			else
-			tableArray[row][col] = "Player-Name ";
+			{
+				tableArray[row][col] = "Player-Name ";
+			}
 		}
 		
 		else if (col == 4 || col == 12 || col == 20)
