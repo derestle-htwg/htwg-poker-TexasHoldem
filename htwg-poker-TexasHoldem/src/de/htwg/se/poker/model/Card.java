@@ -41,11 +41,6 @@ public class Card {
 	@Override
 	public String toString()
 	{
-		StringBuilder s = new StringBuilder (suit + " " + rank);
-		for (@SuppressWarnings("unused") int i = 0; s.length() < 13; i++)
-		{
-			s.append(" ");
-		}
-		return s.toString();
+		return String.format("%13s", suit + " " + rank);
 	}
 }
