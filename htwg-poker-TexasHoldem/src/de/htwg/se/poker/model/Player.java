@@ -3,24 +3,22 @@ package de.htwg.se.poker.model;
 public class Player {
 	
 	private String name;
-	private String namePlayer;
 	private double playerInitCapital;
-		
-	public String getPlayerName() 
-	{
-		namePlayer = "robert";
-		return namePlayer;
-	}
 	
-	public Double getPlayerInitCapital()
+	public Player(String inName, double inPlayerInitCapital)
 	{
-		playerInitCapital = 500.00;
+		name = inName;
+		playerInitCapital = inPlayerInitCapital;
+	}
+		
+	public double getPlayerInitCapital()
+	{
 		return playerInitCapital;
 	}
 	
 	public void setPlayerInitCapital(double capital)
 	{
-		System.out.printf("Ihr aktuellen ChipStand betrŠgt: %d Û\n\n", capital);
+		System.out.printf("Ihr aktuellen ChipStand betrï¿½gt: %d ï¿½\n\n", capital);
 	}
 
 	public String getName()

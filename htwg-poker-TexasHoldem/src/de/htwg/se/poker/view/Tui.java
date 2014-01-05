@@ -35,13 +35,13 @@ public class Tui implements GameInterface{
 		
 		do
 		{
-			Player tmpPly = new Player();
+			Player tmpPly = new Player("",0.0);
 			dataOutput.println("Name des " + (players.size()+1) + ". Spielers: ");
 			
 			tmpPly.setName(readLine());
 			players.add(tmpPly);
 			
-			dataOutput.println("\nZusätzlichen Spieler? [j/n]");
+			dataOutput.println("\nZusï¿½tzlichen Spieler? [j/n]");
 			
 		} 
 		while(readLine().equalsIgnoreCase("j"));

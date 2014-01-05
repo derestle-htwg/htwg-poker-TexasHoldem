@@ -1,6 +1,8 @@
 package de.htwg.se.poker.controller;
 
 import de.htwg.se.poker.model.*;
+import de.htwg.se.poker.model.Card.Rank;
+import de.htwg.se.poker.model.Card.Suit;
 
 public class Poker {
 		
@@ -8,12 +10,12 @@ public class Poker {
 	{
 		Table table = new Table();
 		
-		table.tableElem.getCardsElements().setMiddleCards();
+		//table.tableElem.getCardsElements().setMiddleCards();
 		
 		int round = 0;
 		round++;
 		
-		table.setTableComponents(round);
+		//table.setTableComponents(round);
 	}
 		
 }
