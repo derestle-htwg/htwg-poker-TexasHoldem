@@ -6,35 +6,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.LinkedList;
 import java.util.List;
 import de.htwg.se.poker.model.*;
 
-import de.htwg.se.poker.model.*;
-
-public class Tui implements GameInterface{
+public class PlayerTui implements PlayerInterface{
 	
-	private InputStream dataInput;
-	private PrintStream dataOutput;
+	TuiHelper tuiHelper;
 	
-	private BufferedReader br;
-	
-	public Tui()
+	public PlayerTui()
 	{
 		this(System.in,System.out);
 	}
 	
-	public Tui(InputStream inStr, PrintStream outStr)
+	public PlayerTui(InputStream inStr, PrintStream outStr)
 	{
-
-		dataInput = inStr;
-		dataOutput = outStr;
-		br = new BufferedReader(new InputStreamReader(dataInput));
-
-		DataInput = inStr;
-		DataOutput = outStr;
-		br = new BufferedReader(new InputStreamReader(DataInput));
-
+		tuiHelper = new TuiHelper(inStr, outStr);
 	}
 
 	
@@ -48,7 +36,7 @@ public class Tui implements GameInterface{
 	}
 
 
-	public List<Player> getNewPlayers()
+	private List<Player> getNewPlayers()
 	{
 		List<Player> players = new LinkedList<Player>();
 		
@@ -70,19 +58,14 @@ public class Tui implements GameInterface{
 	}
 	
 	
-	
-	public int readInt()
-	{
-		return Integer.parseInt(readLine());
+
+	public void updateTable(Table inTable) {
+		// TODO Auto-generated method stub
+		
 	}
-	
-	public String readLine()
-	{
-		try {
-			return br.readLine();
-		} catch (IOException ioe) {
-		System.out.println("IO error!");
-		System.exit(1);}
+
+	public SimpleEntry<action, Integer> getPlayerAction() {
+		// frage den Spieler, welche Aktion er machen will.
 		return null;
 	}
 }
