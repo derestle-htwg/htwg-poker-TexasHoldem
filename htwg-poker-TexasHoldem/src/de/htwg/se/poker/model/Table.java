@@ -17,10 +17,11 @@ public class Table {
 	{
 		players = inPlayers;
 		myDeck = new Deck();
+		middleCards = new Card[5];
 	}
 
 	private Deck myDeck;
-	private Card[] middleCards = new Card[5];
+	private Card[] middleCards;
 	private List<Player> players;
 	
 }

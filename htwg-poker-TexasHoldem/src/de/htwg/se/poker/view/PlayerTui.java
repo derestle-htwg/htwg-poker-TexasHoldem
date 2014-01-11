@@ -18,7 +18,7 @@ public class PlayerTui implements PlayerInterface{
 	private InputStream dataInput;
 	private PrintStream dataOutput;
 	
-	tuiHelper tuiHelper;
+	tuiHelper myTuiHelper;
 	
 	public PlayerTui()
 	{
@@ -27,7 +27,7 @@ public class PlayerTui implements PlayerInterface{
 	
 	public PlayerTui(InputStream inStr, PrintStream outStr)
 	{
-		tuiHelper = new tuiHelper(inStr, outStr);
+		myTuiHelper = new tuiHelper(inStr, outStr);
 	}
 	
 	public PlayerTui(InputStream inStr, OutputStream outStr)
@@ -55,14 +55,14 @@ public class PlayerTui implements PlayerInterface{
 			Player tmpPly = new Player("",0.0);
 			dataOutput.println("Name des " + (players.size()+1) + ". Spielers: ");
 			
-			tmpPly.setName(readLine());
+			tmpPly.setName(myTuiHelper.readLine());
 			players.add(tmpPly);
 			
 
 			dataOutput.println("\nZus�tzlichen Spieler? [j/n]");
 			
 		} 
-		while(readLine().equalsIgnoreCase("j"));
+		while(myTuiHelper.readLine().equalsIgnoreCase("j"));
 		
 		return players;
 	}
@@ -77,5 +77,17 @@ public class PlayerTui implements PlayerInterface{
 	public SimpleEntry<action, Integer> getPlayerAction() {
 		// frage den Spieler, welche Aktion er machen will.
 		return null;
+	}
+
+	@Override
+	public Player getPlayer() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setPlayer(Player inPlayer) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -1,12 +1,14 @@
 package de.htwg.se.poker.view;
 
 
+import junit.framework.TestCase;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 
-public class PlayerTuiTest {
+public class PlayerTuiTest extends TestCase {
 	
 	@Before
 	public void setUp() throws Exception {

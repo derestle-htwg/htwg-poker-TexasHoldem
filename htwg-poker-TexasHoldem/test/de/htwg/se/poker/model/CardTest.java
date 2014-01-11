@@ -1,6 +1,7 @@
 package de.htwg.se.poker.model;
 
 import static org.junit.Assert.*;
+import junit.framework.TestCase;
 
 import org.junit.Test;
 import org.junit.After;
@@ -9,15 +10,15 @@ import org.junit.Before;
 import de.htwg.se.poker.model.Card.Rank;
 import de.htwg.se.poker.model.Card.Suit;
 
-public class CardTest {
+public class CardTest extends TestCase{
 	
 	@Before
-    public void setUp() throws Exception {
+    public void setUp() {
             
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
 
     }
 	
