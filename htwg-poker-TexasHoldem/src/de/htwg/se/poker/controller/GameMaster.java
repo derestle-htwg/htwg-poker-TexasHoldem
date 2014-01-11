@@ -1,4 +1,7 @@
 package de.htwg.se.poker.controller;
+
+import de.htwg.se.poker.model.Table;
+
 /*
  * Der Gamemaster Steuert das Spiel.
  * 	er verteilt Karten,
@@ -7,8 +10,28 @@ package de.htwg.se.poker.controller;
  * */
 public class GameMaster {
 	
+	Table myTable;
+	
 	public void GameMaster(){
 		
 	}
+	
+	private void Start(){
+		
+	}
+	
+	private void roundOne(){
+		
+	}
+	
+	private void roundTwo(){
+		
+	}
+		
+	private void roundThree()
+	{
+		
+	}
+	
 
 }

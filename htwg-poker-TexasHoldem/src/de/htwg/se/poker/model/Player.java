@@ -2,6 +2,8 @@ package de.htwg.se.poker.model;
 
 import java.util.List;
 
+import de.htwg.se.poker.view.PlayerInterface;
+
 public class Player {
 	
 	private String name;
@@ -23,6 +25,7 @@ public class Player {
 	{
 		System.out.printf("Ihr aktuellen ChipStand betr�gt: %d �\n\n", capital);
 	}
+	
 
 	public String getName()
 	{

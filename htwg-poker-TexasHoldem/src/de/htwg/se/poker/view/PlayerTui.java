@@ -1,19 +1,24 @@
 package de.htwg.se.poker.view;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.LinkedList;
 import java.util.List;
+
 import de.htwg.se.poker.model.*;
 
 public class PlayerTui implements PlayerInterface{
 	
-	TuiHelper tuiHelper;
+	
+	private InputStream dataInput;
+	private PrintStream dataOutput;
+	
+	tuiHelper tuiHelper;
 	
 	public PlayerTui()
 	{
@@ -22,7 +27,12 @@ public class PlayerTui implements PlayerInterface{
 	
 	public PlayerTui(InputStream inStr, PrintStream outStr)
 	{
-		tuiHelper = new TuiHelper(inStr, outStr);
+		tuiHelper = new tuiHelper(inStr, outStr);
+	}
+	
+	public PlayerTui(InputStream inStr, OutputStream outStr)
+	{
+		this(inStr,new PrintStream(outStr));
 	}
 
 	

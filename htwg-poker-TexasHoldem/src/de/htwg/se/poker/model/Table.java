@@ -16,9 +16,7 @@ public class Table {
 	public Table(List<Player> inPlayers)
 	{
 		players = inPlayers;
-		for(int i = 0;i<5;i++)
-			middleCards[i] = null;
-		myDeck = new Deck(); 
+		myDeck = new Deck();
 	}
 
 	private Deck myDeck;
