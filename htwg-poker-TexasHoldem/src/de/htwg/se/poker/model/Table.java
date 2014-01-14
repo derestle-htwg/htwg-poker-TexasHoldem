@@ -15,10 +15,33 @@ public class Table {
  * */
 	public Table(List<Player> inPlayers)
 	{
-		players = inPlayers;
+		setPlayers(inPlayers);
 		for(int i = 0;i<5;i++)
 			middleCards[i] = null;
-		myDeck = new Deck(); 
+		setMyDeck(new Deck()); 
+	}
+
+	public Deck getMyDeck() {
+		return myDeck;
+	}
+	public void setMyDeck(Deck myDeck) {
+		this.myDeck = myDeck;
+	}
+
+	public List<Player> getPlayers() {
+		return players;
+	}
+
+	public void setPlayers(List<Player> players) {
+		this.players = players;
+	}
+
+	public Card[] getMiddleCards() {
+		return middleCards;
+	}
+
+	public void setMiddleCards(Card[] middleCards) {
+		this.middleCards = middleCards;
 	}
 
 	private Deck myDeck;
