@@ -15,6 +15,7 @@ public class Table {
  * */
 	public Table(List<Player> inPlayers)
 	{
+		middleCards = new Card[5];
 		setPlayers(inPlayers);
 		for(int i = 0;i<5;i++)
 			middleCards[i] = null;
