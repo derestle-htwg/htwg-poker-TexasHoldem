@@ -10,6 +10,7 @@ import de.htwg.se.poker.model.Card.Rank;
 import de.htwg.se.poker.model.Card.Suit;
 import de.htwg.se.poker.view.PlayerInterface;
 import de.htwg.se.poker.view.PlayerTui;
+import de.htwg.se.poker.view.netTui;
 
 public class Poker {
 	
@@ -108,7 +109,7 @@ public class Poker {
 	{
 		LinkedList<Class<? extends PlayerInterface>> myInterfaces = new LinkedList<Class<? extends PlayerInterface>>();
 		myInterfaces.add(PlayerTui.class);
-		myInterfaces.add(PlayerTui.class);
+		myInterfaces.add(netTui.class);
 		return myInterfaces;
 	}
 		
