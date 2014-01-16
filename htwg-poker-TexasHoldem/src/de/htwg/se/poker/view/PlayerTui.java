@@ -1,9 +1,6 @@
 package de.htwg.se.poker.view;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.util.AbstractMap.SimpleEntry;
@@ -14,6 +11,7 @@ import de.htwg.se.poker.model.*;
 
 public class PlayerTui implements PlayerInterface{
 	
+	public static String InterfaceName = "TextUserInterface";
 	
 	private InputStream dataInput;
 	private PrintStream dataOutput;
@@ -89,5 +87,10 @@ public class PlayerTui implements PlayerInterface{
 	public void setPlayer(Player inPlayer) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public String getPlayerName() {
+		System.out.println("Geben sie ihren Namen ein:");
+		return myTuiHelper.readLine();
 	}
 }

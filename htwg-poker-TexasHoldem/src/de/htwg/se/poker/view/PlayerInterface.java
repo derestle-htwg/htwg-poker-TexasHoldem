@@ -7,6 +7,8 @@ import de.htwg.se.poker.model.Table;
 
 public interface PlayerInterface {
 	
+	public String InterfaceName = "UnknownInterface";
+	
 	public enum action{call,raise,fold}
 
 	public void updateTable(Table inTable);
@@ -16,4 +18,6 @@ public interface PlayerInterface {
 	public Player getPlayer();
 	
 	public void setPlayer(Player inPlayer);
+	
+	public String getPlayerName();
 }
