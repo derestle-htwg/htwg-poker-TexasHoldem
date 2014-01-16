@@ -44,7 +44,7 @@ public class PlayerTui implements PlayerInterface{
 	}
 
 
-	private List<Player> getNewPlayers()
+	/*private List<Player> getNewPlayers()
 	{
 		List<Player> players = new LinkedList<Player>();
 		
@@ -63,7 +63,7 @@ public class PlayerTui implements PlayerInterface{
 		while(myTuiHelper.readLine().equalsIgnoreCase("j"));
 		
 		return players;
-	}
+	}*/
 	
 	
 

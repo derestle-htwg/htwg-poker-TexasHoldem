@@ -16,7 +16,7 @@ public class GameMaster {
 	Table myTable;
 	List<Player> myPlayers;
 	
-	public void GameMaster(List<Player> inPlayers){
+	public GameMaster(List<Player> inPlayers){
 		myPlayers = inPlayers;
 		myTable = new Table(myPlayers);
 	}

@@ -7,23 +7,30 @@ import de.htwg.se.poker.view.PlayerInterface;
 public class Player {
 	
 	private String name;
-	private double playerInitCapital;
+	private double playerCapital;
 	private List<Card> cards;
+	private PlayerInterface pi;
 	
-	public Player(String inName, double inPlayerInitCapital)
+	public Player(double inPlayerInitCapital, PlayerInterface inPi)
 	{
-		name = inName;
-		playerInitCapital = inPlayerInitCapital;
+		name = inPi.getPlayerName();
+		playerCapital = inPlayerInitCapital;
+		pi = inPi;
 	}
 	
-	public double getPlayerInitCapital()
+	public PlayerInterface getPlayersInterface()
 	{
-		return playerInitCapital;
+		return pi;
+	}
+	
+	public double getPlayerCapital()
+	{
+		return playerCapital;
 	}
 	
 	public void setPlayerInitCapital(double capital)
 	{
-		System.out.printf("Ihr aktuellen ChipStand betr�gt: %d �\n\n", capital);
+		playerCapital = capital;
 	}
 	
 

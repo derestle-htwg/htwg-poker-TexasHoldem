@@ -32,10 +32,11 @@ public class Poker {
 		for(int i = 0; i<PlayerCount;i++)
 		{
 			PlayerInterface pi = askPlayerInterface(interfaces,i+1);
-			Player p = new Player(pi.getPlayerName(),STARTCAPITAL);
+			
+			Player p = new Player(STARTCAPITAL,pi);
 			Players.add(p);
 		}
-		GameMaster myGame = new GameMaster();
+		GameMaster myGame = new GameMaster(Players);
 		
 		
 	}
@@ -106,6 +107,7 @@ public class Poker {
 	private static List<Class<? extends PlayerInterface>> getAllInterfaces()
 	{
 		LinkedList<Class<? extends PlayerInterface>> myInterfaces = new LinkedList<Class<? extends PlayerInterface>>();
+		myInterfaces.add(PlayerTui.class);
 		myInterfaces.add(PlayerTui.class);
 		return myInterfaces;
 	}

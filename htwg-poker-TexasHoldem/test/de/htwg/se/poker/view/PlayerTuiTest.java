@@ -36,10 +36,10 @@ public class PlayerTuiTest extends TestCase {
 		myOutput = new TestOutputstream();
 		myTui = new PlayerTui(myInput,System.out);//myOutput);
 		myPlayers = new LinkedList<Player>();
-		p1 = new Player("p1",100.0);
-		p2 = new Player("p2",100.0);
-		p3 = new Player("p3",100.0);
-		p4 = new Player("p4",100.0);
+		p1 = new Player(100.0,myTui);
+		p2 = new Player(100.0,myTui);
+		p3 = new Player(100.0,myTui);
+		p4 = new Player(100.0,myTui);
 		
 		myPlayers.add(p1);
 		myPlayers.add(p2);
