@@ -97,7 +97,7 @@ public class Poker {
 				Players = Integer.parseInt(text);
 			} catch (NumberFormatException e) {
 				System.out.println("\"" + text + "\"ist keine gültige Anzahl spieler!");
-				System.out.println("Es müssen mindestens 2 und dürfen höchstens 8 Spieler teilnehmen.");
+				System.out.println("Es müssen mindestens " + MIN_PLAYERS + " und dürfen höchstens " + MAX_PLAYERS + " Spieler teilnehmen.");
 			} catch (IOException e) {
 				System.out.println("Fehler bei der Eingabe,");			
 			}

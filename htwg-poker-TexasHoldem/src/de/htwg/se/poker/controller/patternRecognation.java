@@ -1,30 +1,102 @@
 package de.htwg.se.poker.controller;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.SortedSet;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeSet;
-
 import de.htwg.se.poker.model.Card;
 import de.htwg.se.poker.model.Card.Rank;
 import de.htwg.se.poker.model.Card.Suit;
 import de.htwg.se.poker.model.Player;
 import de.htwg.se.poker.model.Table;
 
-/* Showdown */
 public class patternRecognation {
+	
+	private interface cardHandComperator
+	{
+		public boolean call(List<Card> Input);
+	}
 
-	 public Player ComparePalyers(Table inTable)
+	 public List<Player> ComparePlayers(Table inTable)
 	 {
+		 List<Player> winners = new LinkedList<Player>();
+		 Map<Player,List<Card>> playersCards = new HashMap<Player, List<Card>>(); 
 		 
-		 		 
-		 return null;
+		 for(Player p : inTable.getPlayers())
+		 {
+			 List<Card> cards = new LinkedList<Card>();
+			 cards.addAll(p.getCards());
+			 for(Card c : inTable.getMiddleCards())
+				 cards.add(c);
+			 playersCards.put(p, cards);
+		 }
+		 
+		 cascadeHandComperator(new cardHandComperator() {@Override public boolean call(List<Card> Input) { return isRoyalFlush(Input);}},winners,playersCards);
+		 cascadeHandComperator(new cardHandComperator() {@Override public boolean call(List<Card> Input) { return isStraightFlush(Input);}},winners,playersCards);
+		 cascadeHandComperator(new cardHandComperator() {@Override public boolean call(List<Card> Input) { return isFourOfAKind(Input);}},winners,playersCards);
+		 cascadeHandComperator(new cardHandComperator() {@Override public boolean call(List<Card> Input) { return isTwinDrilling(Input);}},winners,playersCards);
+		 cascadeHandComperator(new cardHandComperator() {@Override public boolean call(List<Card> Input) { return isAllSameSuite(Input);}},winners,playersCards);
+		 cascadeHandComperator(new cardHandComperator() {@Override public boolean call(List<Card> Input) { return isStraight(Input);}},winners,playersCards);
+		 cascadeHandComperator(new cardHandComperator() {@Override public boolean call(List<Card> Input) { return isDrilling(Input);}},winners,playersCards);
+		 cascadeHandComperator(new cardHandComperator() {@Override public boolean call(List<Card> Input) { return isDoubleTwin(Input);}},winners,playersCards);
+		 cascadeHandComperator(new cardHandComperator() {@Override public boolean call(List<Card> Input) { return isTwin(Input);}},winners,playersCards);
+		 
+		 if(winners.isEmpty())
+		 {
+			 List<Card> allCards = new LinkedList<Card>();
+			 for(Player p : inTable.getPlayers())
+			 {
+				 allCards.addAll(p.getCards());
+			 }
+			 
+			 Card highestCard = ReturnHighestCard(allCards);
+			 
+			 for(Player p : inTable.getPlayers())
+			 {
+				 for(Card c : p.getCards())
+					 if(c.getRank().equals(highestCard.getRank()))
+						 winners.add(p);
+			 }
+		 }
+		 
+		 return winners;
 	 }
 	 
-	 boolean isDoubleTwin(List<Card> inCards)
+	 private List<Player> cascadeHandComperator(cardHandComperator inFunction, List<Player> inWinners, Map<Player,List<Card>> inPlayerCards)
+	 {
+		 if(inWinners.isEmpty())
+		 {//vergleichen
+			 for(Entry<Player, List<Card>> kvp : inPlayerCards.entrySet())
+			 {
+				 if(inFunction.call(kvp.getValue()))
+					 inWinners.add(kvp.getKey());
+			 }
+		 }
+		 //Wenn if nicht genommen: Gewinner steht/stehen bereits fest, Ergebnis einfach weiterreichen 
+		 
+		 return inWinners;
+	 }
+	 
+	 private Card ReturnHighestCard(List<Card> inCards)
+	 {
+		 TreeSet<Card> ts = new TreeSet<Card>(new Card.RankComperator()); 
+		 ts.addAll(inCards);
+		 return ts.last();
+	 }
+	 
+	 private boolean isTwin(List<Card> inCards)
+	 {
+		 for(Rank r : Card.Rank.values())
+		 {
+			 if(countRank(r,inCards) == 2)
+				 return true;
+		 }
+		 return false;
+	 }
+	 
+	 private boolean isDoubleTwin(List<Card> inCards)
 	 {
 		 int twinCounter = 0;
 		 for(Rank r : Card.Rank.values())
@@ -33,10 +105,10 @@ public class patternRecognation {
 				 twinCounter++;
 		 }
 		 
-		 return twinCounter == 2;//höchstens 2 twins möglich!
+		 return twinCounter >= 2;
 	 }
 	 
-	 boolean isDrilling(List<Card> inCards)
+	 private boolean isDrilling(List<Card> inCards)
 	 {
 		 for(Rank r : Card.Rank.values())
 		 {
@@ -46,110 +118,158 @@ public class patternRecognation {
 		 return false;
 	 }
 	 
-	 boolean isStraight(List<Card> inCards)
+	 private boolean isStraight(List<Card> inCards)
 	 {
-		 return ranksAreStraight(inCards);
+		 return LongestStraightRanks(inCards,null) >= 5;
 	 }
 	 
-	 boolean isAllSameSuite(List<Card> inCards)
+	 private boolean isAllSameSuite(List<Card> inCards)
 	 {
-		 return suitesAreEqual(inCards);
+		 return suitesAreEqual(inCards,5);
 	 }
 	 
-	 boolean isTwinDrilling(List<Card> inCards)
+	 private boolean isTwinDrilling(List<Card> inCards)
 	 {
-		 Rank r1 = inCards.get(0).getRank();
-		 Rank r2 = null;
+		 boolean three = false;
+		 boolean two = false;
 		 
-		 for(Card c : inCards)
+		 for(Rank r : Rank.values())
 		 {
-			if(c.getRank() !=  r1)
-			{
-				r2 = c.getRank();
-				break;
-			}
+			 if(countRank(r, inCards) >= 3)
+			 {
+				 if(three || two)
+					 return true;
+				 else
+					 three = true;
+			 }
+			 if(countRank(r, inCards) == 2)
+			 {
+				 if(three)
+					 return true;
+				 else
+					 two = true;
+			 }
 		 }
 		 
-		 return (countRank(r1,inCards) + countRank(r2,inCards)) == 5;
+		 return false;
 	 }
 	 
-	 boolean isFourOfAKind(List<Card> inCards)
+	 private boolean isFourOfAKind(List<Card> inCards)
 	 {
-		 //1. oder 2. Karte müssen im 4er Rang sein
-		 Rank r1 = inCards.get(0).getRank();
-		 Rank r2 = inCards.get(1).getRank();
-		 
-		 return countRank(r1, inCards) == 4 || countRank(r2, inCards) == 4;
-		 
+		 for(Rank r : Rank.values())
+		 {
+			 if(countRank(r,inCards) == 4)
+				 return true;
+		 }
+		 return false;
 	 }
 	 
-	 boolean isStraightFlush(List<Card> inCards)
+	 private boolean isStraightFlush(List<Card> inCards)
 	 {
-		 return ranksAreStraight(inCards) & suitesAreEqual(inCards);
+		 for(Suit s : Suit.values())
+		 {
+			 if(LongestStraightRanks(inCards,s) >= 5)
+				 return true;
+		 }
+		 return false;
 	 }
 	 
-	 boolean isRoyalFlush(List<Card> inCards)
+	 private boolean isRoyalFlush(List<Card> inCards)
 	 {
-		 suitesAreEqual(inCards);
-		 
 		 boolean Ace,King,Queen,Jack,Ten;
-		 Ace = King = Queen = Jack = Ten = false;
-		 
-		 for(Card c :inCards)
+		  
+		 for(Suit s : Suit.values())
 		 {
-			switch(c.getRank())
-			{
-			case ACE:
-				Ace = true;
-				break;
-			case KING:
-				King = true;
-				break;
-			case QUEEN:
-				Queen = true;
-				break;
-			case JACK:
-				Jack = true;
-				break;
-			case TEN:
-				Ten = true;
-				break;
-			default:
-				return false;
-			}
+			 Ace = King = Queen = Jack = Ten = false;
+			 
+			 for(Card c :inCards)
+			 {
+				if(c.getSuit() == s)
+				{
+					switch(c.getRank())
+					{
+					case ACE:
+						Ace = true;
+						break;
+					case KING:
+						King = true;
+						break;
+					case QUEEN:
+						Queen = true;
+						break;
+					case JACK:
+						Jack = true;
+						break;
+					case TEN:
+						Ten = true;
+						break;
+					default:
+						return false;
+					}
+				}
+			 }
+			 if(Ace&King&Queen&Jack&Ten)
+				 return true;
 		 }
-		 return Ace&King&Queen&Jack&Ten;
+		 return false;
 	 }
 	 
-	 boolean suitesAreEqual(List<Card> inCards)
+	 private boolean suitesAreEqual(List<Card> inCards,int minCounter)
 	 {
-		 Suit s = inCards.get(0).getSuit();
+		 int cH= minCounter;
+		 int cD = minCounter;
+		 int cC = minCounter;
+		 int cS = minCounter;
+		 
 		 for(Card c : inCards)
 		 {
-			 if(c.getSuit() != s)
-				 return false;
+			 if(c.getSuit() == Suit.SPADE)
+				 cS--;
+			 if(c.getSuit() == Suit.CLUB)
+				 cC--;
+			 if(c.getSuit() == Suit.HEART)
+				 cH--;
+			 if(c.getSuit() == Suit.DIAMOND)
+				 cD--;
+			 if(cS == 0 || cC == 0 || cH == 0 || cD == 0)
+				 return true;
 		 }
-		 return true;
+		 return false;
 	 }
 	 
-	 boolean ranksAreStraight(List<Card> inCards)
+	 private int LongestStraightRanks(List<Card> inCards,Suit s)
 	 {
 		 TreeSet<Card> ts = new TreeSet<Card>(new Card.RankComperator()); 
 		 ts.addAll(inCards);
 		 
 		 int LastIndex = ts.first().getRank().ordinal()-1;
+		 int actualCount = 0;
+		 int longestCount = 0;
 		 
 		 for(Card c : ts)
 		 {
-			 if(LastIndex-c.getRank().ordinal() == 1)
-				 LastIndex++;
-			 else
-				 return false;
+			 if(s == null || c.getSuit() == s)
+			 {
+				 if(c.getRank().ordinal()-LastIndex == 1)
+				 {//ein weiterführendes Element gefunden
+					 LastIndex++;
+					 actualCount++;
+				 }
+				 else if(LastIndex-c.getRank().ordinal() == 0)
+					 continue;//gleicher Rang, nach nächstem Element schauen
+				 else
+				 {
+					 LastIndex = c.getRank().ordinal();
+					 actualCount = 1;
+				 }
+			 }
+			 if(actualCount > longestCount)
+				 longestCount = actualCount;
 		 }
-		 return true;
+		 return longestCount;
 	 }
 	 
-	 int countRank(Rank r, List<Card> inCards){
+	 private int countRank(Rank r, List<Card> inCards){
 		 int rankCount = 0;
 		 for(Card c : inCards)
 		 {
