@@ -43,8 +43,10 @@ public class PlayerTui implements PlayerInterface{
 
 	public action getPlayerAction(List<action> possibileActions,double minimalBet) {
 		// frage den Spieler, welche Aktion er machen will.
-		dataOutput.println("Sie sind dran, was wollen sie machen?");
-		dataOutput.printf("sie müssen mit mindestens [%8.2f] mitgehen",minimalBet);
+		dataOutput.println("Hallo " + me.getName() + ", Sie sind dran.");
+		dataOutput.printf("Sie haben noch [%8.2f] Geld.\n", me.getPlayerCapital());
+		dataOutput.printf("sie müssen mit mindestens [%8.2f] mitgehen\n",minimalBet);
+		dataOutput.println("Was wollen sie machen?");
 		int i = 1;
 		HashMap<Integer,action> menu = new HashMap<Integer, PlayerInterface.action>();
 		
@@ -55,7 +57,7 @@ public class PlayerTui implements PlayerInterface{
 			i++;
 		}
 		
-		int choice = myTuiHelper.readInt(1, i);
+		int choice = myTuiHelper.readInt(1, i-1);
 		
 		return menu.get(choice);
 	}
@@ -97,7 +99,10 @@ public class PlayerTui implements PlayerInterface{
 		dataOutput.printf("[%13s] : %s\n","Spielername","Anteil am Pot");
 		for(Player p : inTable.getPlayers())
 		{
-			dataOutput.printf("[%13s] : %8.2f\n",p.getName(),inTable.getPlayersPot(p));
+			if(inTable.getPlayersOut().contains(p))
+				dataOutput.printf("[%13s] : [%8.2f] [OUT] \n",p.getName(),inTable.getPlayersPot(p));
+			else
+				dataOutput.printf("[%13s] : [%8.2f]\n",p.getName(),inTable.getPlayersPot(p));
 			if(p.equals(me))
 				dataOutput.printf("\tmeine Karten: [ %13s I %13s ]\n",p.getCards().get(0),p.getCards().get(1));
 				

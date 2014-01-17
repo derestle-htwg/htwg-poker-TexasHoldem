@@ -107,12 +107,41 @@ public class Table extends Observable{
 		
 	}
 
+	/**
+	 * @return the perPlayerPot
+	 */
+	public double getPerPlayerPot() {
+		return perPlayerPot;
+	}
+
+	/**
+	 * @param perPlayerPot the perPlayerPot to set
+	 */
+	public void setPerPlayerPot(double perPlayerPot) {
+		this.perPlayerPot = perPlayerPot;
+	}
+
+	/**
+	 * @return the playersOut
+	 */
+	public List<Player> getPlayersOut() {
+		return playersOut;
+	}
+
+	/**
+	 * @param playersOut the playersOut to set
+	 */
+	public void setPlayersOut(List<Player> playersOut) {
+		this.playersOut = playersOut;
+	}
+
 	private Deck myDeck;
 	private Card[] middleCards;
 	private List<Player> players;
 	private int dealerPos;
 	private double pot;
 	private Map<Player,Double> playerPot;
-	
+	private double perPlayerPot;
+	private List<Player> playersOut;
 	
 }

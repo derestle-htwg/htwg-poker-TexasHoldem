@@ -18,7 +18,7 @@ import de.htwg.se.poker.view.PlayerInterface.action;
 public class GameMaster {
 	
 	Table myTable;
-	List<Player> playersOut;
+	
 	
 	public GameMaster(List<Player> inPlayers){
 		myTable = new Table(inPlayers);
@@ -43,13 +43,22 @@ public class GameMaster {
 			if(PlayerAction == action.quitGame)
 			{
 				myTable.getPlayers().remove(p);
-				
+				if(actualPos < myTable.getDealerPos())
+					myTable.setDealerPos(myTable.getDealerPos()-1);
+				for(Player p2 : myTable.getPlayers())
+					p2.getPlayersInterface().sendInfo("Der Spieler " + p.getName() + " hat das Spiel verlassen");
 			}
+			else if(PlayerAction == action.fold)
+			{
+				myTable.getPlayersOut().add(p);
+			}
+			else if(PlayerAction == action.call){}
+			else if(PlayerAction == action.raise){}
 			
 			actualPos++;
 			actualPos = actualPos%myTable.getPlayers().size();
 		}
-		while(actualPos != lastBetPos);
+		while(actualPos != lastBetPos && (myTable.getPlayers().size() - myTable.getPlayersOut().size()) > 1);
 	}
 	
 	public void StartGame(){
@@ -65,7 +74,7 @@ public class GameMaster {
 	
 	private void resetTableforNextRound()
 	{
-		playersOut = new LinkedList<Player>();
+		myTable.setPlayersOut(new LinkedList<Player>());
 		myTable.resetForNextRound();
 	}
 	
