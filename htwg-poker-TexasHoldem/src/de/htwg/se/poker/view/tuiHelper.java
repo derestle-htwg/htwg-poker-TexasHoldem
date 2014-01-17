@@ -29,7 +29,25 @@ public class tuiHelper {
 	}
 
 	public int readInt(){
-		return Integer.parseInt(readLine());
+		while(true)
+		{
+			try {
+				return Integer.parseInt(readLine());
+			} catch (NumberFormatException e) {
+				dataOut.println("Die eingabe konnte nicht in eine Zahl umgewandelt werden!");
+			}
+		}
+	}
+	
+	public int readInt(int Min, int Max){
+		int retVal = 0;
+		do
+		{
+			dataOut.println("Geben sie eine Zahl zwischen " + Min + " und " + Max + " ein.");
+			retVal = Integer.parseInt(readLine());
+		}
+		while(retVal < Min || retVal > Max);
+		return retVal;
 	}
 	
 	

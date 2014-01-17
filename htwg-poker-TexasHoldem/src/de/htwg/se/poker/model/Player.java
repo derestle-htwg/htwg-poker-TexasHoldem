@@ -13,7 +13,6 @@ public class Player {
 	
 	public Player(double inPlayerInitCapital, PlayerInterface inPi)
 	{
-		name = inPi.getPlayerName();
 		playerCapital = inPlayerInitCapital;
 		pi = inPi;
 	}

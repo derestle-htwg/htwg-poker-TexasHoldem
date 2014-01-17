@@ -74,7 +74,7 @@ public class PlayerTuiTest extends TestCase {
 		
 		myOutput.setText("");
 		
-		myTui.showTable(myTable, null);
+		myTui.updateTable(myTable);
 	}
 
 	@Test

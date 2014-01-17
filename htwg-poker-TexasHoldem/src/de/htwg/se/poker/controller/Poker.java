@@ -32,17 +32,21 @@ public class Poker {
 		
 		for(int i = 0; i<PlayerCount;i++)
 		{
-			PlayerInterface pi = askPlayerInterface(interfaces,i+1);
+			PlayerInterface pi = getPlayerInterface(interfaces,i+1);
 			
 			Player p = new Player(STARTCAPITAL,pi);
+			pi.setPlayer(p);
 			Players.add(p);
 		}
-		GameMaster myGame = new GameMaster(Players);
 		
+		for(Player p : Players)
+			p.setName(p.getPlayersInterface().getPlayerName());
+		GameMaster myGame = new GameMaster(Players);
+		myGame.StartGame();
 		
 	}
 	
-	private static PlayerInterface askPlayerInterface(List<Class<? extends PlayerInterface>> myInterfaces, int PlayerNo)
+	private static PlayerInterface getPlayerInterface(List<Class<? extends PlayerInterface>> myInterfaces, int PlayerNo)
 	{
 		System.out.println("Was für ein Interface benutzt Spieler " + PlayerNo + "?");
 		

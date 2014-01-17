@@ -4,25 +4,25 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.List;
+import java.util.Observable;
 
 import de.htwg.se.poker.model.Player;
 import de.htwg.se.poker.model.Table;
+import de.htwg.se.poker.view.PlayerInterface.action;
 
 public class netTui implements PlayerInterface {
 
-	java.net.ServerSocket serverSocket;
+	static java.net.ServerSocket serverSocket;
 	java.net.Socket mySocket;
 	PlayerTui myTui;
 	
+
 	public netTui()
 	{
-		this(55455);
-	}
-	
-	public netTui(int Port)
-	{
 		try {
-			serverSocket = new java.net.ServerSocket(Port);
+			if(serverSocket == null)
+				serverSocket = new java.net.ServerSocket(55455);
 			mySocket = serverSocket.accept();
 			InputStream is = mySocket.getInputStream();
 			OutputStream os = mySocket.getOutputStream();
@@ -36,10 +36,10 @@ public class netTui implements PlayerInterface {
 	public void updateTable(Table inTable) {
 		myTui.updateTable(inTable);
 	}
-
+	
 	@Override
-	public SimpleEntry<action, Integer> getPlayerAction() {
-		return myTui.getPlayerAction();
+	public action getPlayerAction(List<action> possibileActions,double minimalBet) {
+		return myTui.getPlayerAction(possibileActions,minimalBet);
 	}
 
 	@Override
@@ -55,6 +55,18 @@ public class netTui implements PlayerInterface {
 	@Override
 	public String getPlayerName() {
 		return myTui.getPlayerName();
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		myTui.update(o, arg);
+		
+	}
+
+	@Override
+	public void sendInfo(String info) {
+		// TODO Auto-generated method stub
+		myTui.sendInfo(info);
 	}
 
 }
