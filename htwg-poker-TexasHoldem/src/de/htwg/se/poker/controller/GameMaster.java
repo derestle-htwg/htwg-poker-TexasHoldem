@@ -1,6 +1,5 @@
 package de.htwg.se.poker.controller;
 
-import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,7 +8,6 @@ import de.htwg.se.poker.model.Card;
 import de.htwg.se.poker.model.Player;
 import de.htwg.se.poker.model.Table;
 import de.htwg.se.poker.view.PlayerInterface.action;
-import de.htwg.se.poker.view.PlayerTuiTest;
 
 /*
  * Der Gamemaster Steuert das Spiel.

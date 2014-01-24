@@ -8,7 +8,13 @@ public class Card {
 	{
 		@Override
 		public int compare(Card o1, Card o2) {
-			return Integer.compare(o1.getRank().ordinal(), o2.getRank().ordinal());
+			if(o1.getRank().ordinal()>o2.getRank().ordinal()){
+				return 1;
+			}
+			if(o1.getRank().ordinal()==o2.getRank().ordinal()){
+				return 0;
+			}
+			return -1;
 		}
 	}
 	
