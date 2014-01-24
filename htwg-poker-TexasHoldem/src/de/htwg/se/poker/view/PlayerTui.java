@@ -82,17 +82,17 @@ public class PlayerTui implements PlayerInterface{
 		updateTable((Table)o);
 	}
 	
-	private void clearScreen()
+	/*private void clearScreen()
 	{
 		dataOutput.print("\033[2J");//vt100 Commando das den Bildschirm löscht
-	}
+	}*/
 	/**
 	 * Update Table zeigt den aktuellen Tisch an. Wenn der Player null ist wird der gesammte Tisch angezeigt.
 	 * Wenn ein Player übergeben wird, wird der Tisch aus seiner Sicht angezeigt.
 	 * */
 	@Override
 	public void updateTable(Table inTable) {
-		clearScreen();
+		//clearScreen();
 		dataOutput.println(new SimpleDateFormat("\ndd.MM.yyyy HH:mm:ss").format(Calendar.getInstance().getTime()));
 		dataOutput.println("Tisch: " + inTable.getTotalPot());
 		dataOutput.printf("[ ");

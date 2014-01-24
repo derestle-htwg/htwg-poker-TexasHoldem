@@ -44,7 +44,7 @@ public class tuiHelper {
 		do
 		{
 			dataOut.println("Geben sie eine Zahl zwischen " + Min + " und " + Max + " ein.");
-			retVal = Integer.parseInt(readLine());
+			retVal = readInt();
 		}
 		while(retVal < Min || retVal > Max);
 		return retVal;

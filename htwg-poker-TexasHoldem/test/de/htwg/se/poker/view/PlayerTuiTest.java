@@ -9,6 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.htwg.se.poker.controller.GameMaster;
 import de.htwg.se.poker.model.Card;
 import de.htwg.se.poker.model.Card.Rank;
 import de.htwg.se.poker.model.Card.Suit;
@@ -21,66 +22,45 @@ public class PlayerTuiTest extends TestCase {
 	PlayerTui myTui;
 	TestInputStream myInput;
 	TestOutputstream myOutput;
-	LinkedList<Player> myPlayers;
-	Table myTable;
-	
-	Player p1;
-	Player p2;
-	Player p3;
-	Player p4;
-	
-	Card[] myCards;
+
 	@Before
 	public void setUp() throws Exception {
 		myInput = new TestInputStream();
-		myOutput = new TestOutputstream();
-		myTui = new PlayerTui(myInput,System.out);//myOutput);
-		myPlayers = new LinkedList<Player>();
-		p1 = new Player(100.0,myTui);
-		p2 = new Player(100.0,myTui);
-		p3 = new Player(100.0,myTui);
-		p4 = new Player(100.0,myTui);
+		//myOutput = new TestOutputstream();
 		
-		myPlayers.add(p1);
-		myPlayers.add(p2);
-		myPlayers.add(p3);
-		myPlayers.add(p4);
+		myInput.setText("d1\n1\n5\n5\n5\n5\n5\n5\n5\n5\n3\n");
+		myTui = new PlayerTui(myInput,System.out);
+		Player p1 = new Player(100.0, myTui);
+		myTui.setPlayer(p1);
 		
-		myTable = new Table(myPlayers);
-		myCards = new Card[5];
+		myInput.setText("d2\n1\n5\n5\n5\n5\n5\n5\n5\n5\n3\n");
+		myTui = new PlayerTui(myInput,System.out);
+		Player p2 = new Player(100.0, myTui);
+		myTui.setPlayer(p2);
+		
+		myInput.setText("d3\n5\n5\n5\n5\n5\n5\n5\n5\n3\n");
+		myTui = new PlayerTui(myInput,System.out);
+		Player p3 = new Player(100.0, myTui);
+		myTui.setPlayer(p3);
+		
+		LinkedList<Player> lp = new LinkedList<Player>();
+		lp.add(p1);
+		lp.add(p2);
+		lp.add(p3);
+		
+		gm = new GameMaster(lp);
+		
 		
 	}
-
+	GameMaster gm;
 	@After
 	public void tearDown() throws Exception {
 	}
 
 	@Test
 	public void testTui() {
-		
+		// myOutput);
+		gm.StartGame();
 	}
-
-	@Test
-	public void testTuiInputStreamPrintStream() {
-		
-	}
-
-	@Test
-	public void testShowTable() {
-		myCards[0] = new Card(Rank.THREE,Suit.HEART);
-		myCards[1] = new Card(Rank.FIVE,Suit.DIAMOND);
-		myCards[2] = new Card(Rank.SIX,Suit.CLUB);
-		//myTable.setMiddleCards(myCards);
-		
-		myOutput.setText("");
-		
-		myTui.updateTable(myTable);
-	}
-
-	@Test
-	public void testGetNewPlayers() {
-		
-	}
-
 	
 }

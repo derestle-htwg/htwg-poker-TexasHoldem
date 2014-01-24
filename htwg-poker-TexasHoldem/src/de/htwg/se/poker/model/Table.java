@@ -147,7 +147,7 @@ public class Table extends Observable{
 		return totalPot;
 	}
 	
-	private HashMap<Player,Double> actualPot(){
+	private Map<Player,Double> actualPot(){
 		return pots.get(pots.size()-1);
 	}
 	
