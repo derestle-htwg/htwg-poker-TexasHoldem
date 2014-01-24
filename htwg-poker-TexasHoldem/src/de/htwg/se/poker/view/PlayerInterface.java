@@ -12,11 +12,11 @@ public interface PlayerInterface extends Observer{
 	
 	public String InterfaceName = "UnknownInterface";
 	
-	public enum action{call,raise,fold,quitGame}
+	public enum action{call,raise,fold,quitGame,allIn}
 
 	public void updateTable(Table inTable);
 	
-	public action getPlayerAction(List<action> possibileActions,double minimalBet);
+	public action getPlayerAction(List<action> possibileActions,double minimalRaise);
 	
 	public Player getPlayer();
 	
@@ -25,4 +25,6 @@ public interface PlayerInterface extends Observer{
 	public String getPlayerName();
 	
 	public void sendInfo(String info);
+	
+	public double getActionValue();
 }

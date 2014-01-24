@@ -69,4 +69,10 @@ public class netTui implements PlayerInterface {
 		myTui.sendInfo(info);
 	}
 
+	@Override
+	public double getActionValue() {
+		// TODO Auto-generated method stub
+		return myTui.getActionValue();
+	}
+
 }

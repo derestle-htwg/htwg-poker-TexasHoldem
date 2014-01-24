@@ -14,21 +14,21 @@ import de.htwg.se.poker.model.Table;
 
 public class patternRecognation {
 	
-	private interface cardHandComperator
+	private static interface cardHandComperator
 	{
 		public boolean call(List<Card> Input);
 	}
 
-	 public List<Player> ComparePlayers(Table inTable)
+	 public static List<Player> ComparePlayers(List<Player> inPlayers, List<Card> middleCards)
 	 {
 		 List<Player> winners = new LinkedList<Player>();
 		 Map<Player,List<Card>> playersCards = new HashMap<Player, List<Card>>(); 
 		 
-		 for(Player p : inTable.getPlayers())
+		 for(Player p : inPlayers)
 		 {
 			 List<Card> cards = new LinkedList<Card>();
 			 cards.addAll(p.getCards());
-			 for(Card c : inTable.getMiddleCards())
+			 for(Card c : middleCards)
 				 cards.add(c);
 			 playersCards.put(p, cards);
 		 }
@@ -46,14 +46,14 @@ public class patternRecognation {
 		 if(winners.isEmpty())
 		 {
 			 List<Card> allCards = new LinkedList<Card>();
-			 for(Player p : inTable.getPlayers())
+			 for(Player p : inPlayers)
 			 {
 				 allCards.addAll(p.getCards());
 			 }
 			 
 			 Card highestCard = ReturnHighestCard(allCards);
 			 
-			 for(Player p : inTable.getPlayers())
+			 for(Player p : inPlayers)
 			 {
 				 for(Card c : p.getCards())
 					 if(c.getRank().equals(highestCard.getRank()))
@@ -64,7 +64,7 @@ public class patternRecognation {
 		 return winners;
 	 }
 	 
-	 private List<Player> cascadeHandComperator(cardHandComperator inFunction, List<Player> inWinners, Map<Player,List<Card>> inPlayerCards)
+	 private static List<Player> cascadeHandComperator(cardHandComperator inFunction, List<Player> inWinners, Map<Player,List<Card>> inPlayerCards)
 	 {
 		 if(inWinners.isEmpty())
 		 {//vergleichen
@@ -79,14 +79,14 @@ public class patternRecognation {
 		 return inWinners;
 	 }
 	 
-	 private Card ReturnHighestCard(List<Card> inCards)
+	 private static Card ReturnHighestCard(List<Card> inCards)
 	 {
 		 TreeSet<Card> ts = new TreeSet<Card>(new Card.RankComperator()); 
 		 ts.addAll(inCards);
 		 return ts.last();
 	 }
 	 
-	 private boolean isTwin(List<Card> inCards)
+	 private static boolean isTwin(List<Card> inCards)
 	 {
 		 for(Rank r : Card.Rank.values())
 		 {
@@ -96,7 +96,7 @@ public class patternRecognation {
 		 return false;
 	 }
 	 
-	 private boolean isDoubleTwin(List<Card> inCards)
+	 private static boolean isDoubleTwin(List<Card> inCards)
 	 {
 		 int twinCounter = 0;
 		 for(Rank r : Card.Rank.values())
@@ -108,7 +108,7 @@ public class patternRecognation {
 		 return twinCounter >= 2;
 	 }
 	 
-	 private boolean isDrilling(List<Card> inCards)
+	 private static boolean isDrilling(List<Card> inCards)
 	 {
 		 for(Rank r : Card.Rank.values())
 		 {
@@ -118,17 +118,17 @@ public class patternRecognation {
 		 return false;
 	 }
 	 
-	 private boolean isStraight(List<Card> inCards)
+	 private static boolean isStraight(List<Card> inCards)
 	 {
 		 return LongestStraightRanks(inCards,null) >= 5;
 	 }
 	 
-	 private boolean isAllSameSuite(List<Card> inCards)
+	 private static boolean isAllSameSuite(List<Card> inCards)
 	 {
 		 return suitesAreEqual(inCards,5);
 	 }
 	 
-	 private boolean isTwinDrilling(List<Card> inCards)
+	 private static boolean isTwinDrilling(List<Card> inCards)
 	 {
 		 boolean three = false;
 		 boolean two = false;
@@ -154,7 +154,7 @@ public class patternRecognation {
 		 return false;
 	 }
 	 
-	 private boolean isFourOfAKind(List<Card> inCards)
+	 private static boolean isFourOfAKind(List<Card> inCards)
 	 {
 		 for(Rank r : Rank.values())
 		 {
@@ -164,7 +164,7 @@ public class patternRecognation {
 		 return false;
 	 }
 	 
-	 private boolean isStraightFlush(List<Card> inCards)
+	 private static boolean isStraightFlush(List<Card> inCards)
 	 {
 		 for(Suit s : Suit.values())
 		 {
@@ -174,7 +174,7 @@ public class patternRecognation {
 		 return false;
 	 }
 	 
-	 private boolean isRoyalFlush(List<Card> inCards)
+	 private static boolean isRoyalFlush(List<Card> inCards)
 	 {
 		 boolean Ace,King,Queen,Jack,Ten;
 		  
@@ -214,7 +214,7 @@ public class patternRecognation {
 		 return false;
 	 }
 	 
-	 private boolean suitesAreEqual(List<Card> inCards,int minCounter)
+	 private static boolean suitesAreEqual(List<Card> inCards,int minCounter)
 	 {
 		 int cH= minCounter;
 		 int cD = minCounter;
@@ -237,7 +237,7 @@ public class patternRecognation {
 		 return false;
 	 }
 	 
-	 private int LongestStraightRanks(List<Card> inCards,Suit s)
+	 private static int LongestStraightRanks(List<Card> inCards,Suit s)
 	 {
 		 TreeSet<Card> ts = new TreeSet<Card>(new Card.RankComperator()); 
 		 ts.addAll(inCards);
@@ -269,7 +269,7 @@ public class patternRecognation {
 		 return longestCount;
 	 }
 	 
-	 private int countRank(Rank r, List<Card> inCards){
+	 private static int countRank(Rank r, List<Card> inCards){
 		 int rankCount = 0;
 		 for(Card c : inCards)
 		 {

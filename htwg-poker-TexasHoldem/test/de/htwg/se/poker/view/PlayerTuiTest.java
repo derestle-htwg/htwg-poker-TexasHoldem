@@ -70,7 +70,7 @@ public class PlayerTuiTest extends TestCase {
 		myCards[0] = new Card(Rank.THREE,Suit.HEART);
 		myCards[1] = new Card(Rank.FIVE,Suit.DIAMOND);
 		myCards[2] = new Card(Rank.SIX,Suit.CLUB);
-		myTable.setMiddleCards(myCards);
+		//myTable.setMiddleCards(myCards);
 		
 		myOutput.setText("");
 		

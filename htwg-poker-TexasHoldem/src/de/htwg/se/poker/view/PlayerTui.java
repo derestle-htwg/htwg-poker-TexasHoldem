@@ -94,18 +94,24 @@ public class PlayerTui implements PlayerInterface{
 	public void updateTable(Table inTable) {
 		clearScreen();
 		dataOutput.println(new SimpleDateFormat("\ndd.MM.yyyy HH:mm:ss").format(Calendar.getInstance().getTime()));
-		dataOutput.println("Tisch: " + inTable.getPot());
-		dataOutput.printf("[ %13s I %13s I %13s I %13s I %13s ]\n",inTable.getMiddleCards()[0],inTable.getMiddleCards()[1],inTable.getMiddleCards()[2],inTable.getMiddleCards()[3],inTable.getMiddleCards()[4]);
+		dataOutput.println("Tisch: " + inTable.getTotalPot());
+		dataOutput.printf("[ ");
+		for(Card c : inTable.getAllMiddleCards()){
+			dataOutput.printf("%13s I",c);
+		}
+		dataOutput.println();
+
 		dataOutput.printf("[%13s] : %s\n","Spielername","Anteil am Pot");
 		for(Player p : inTable.getPlayers())
 		{
 			if(inTable.getPlayersOut().contains(p))
-				dataOutput.printf("[%13s] : [%8.2f] [OUT] \n",p.getName(),inTable.getPlayersPot(p));
+				dataOutput.printf("[%13s] : [%8.2f] [OUT] \n",p.getName(),inTable.getPot(p));
+			else if (inTable.PlayerIsAllIn(p))
+				dataOutput.printf("[%13s] : [%8.2f] [All In] \n",p.getName(),inTable.getPot(p));
 			else
-				dataOutput.printf("[%13s] : [%8.2f]\n",p.getName(),inTable.getPlayersPot(p));
-			if(p.equals(me))
+				dataOutput.printf("[%13s] : [%8.2f] \n",p.getName(),inTable.getPot(p));
+			if(p.equals(me) && p.getCards().size() > 0)
 				dataOutput.printf("\tmeine Karten: [ %13s I %13s ]\n",p.getCards().get(0),p.getCards().get(1));
-				
 		}
 	}
 
@@ -113,5 +119,11 @@ public class PlayerTui implements PlayerInterface{
 	public void sendInfo(String info) {
 		// TODO Auto-generated method stub
 		dataOutput.println(info);
+	}
+
+	@Override
+	public double getActionValue() {
+		dataOutput.println("Wert eingeben:");
+		return myTuiHelper.readInt();
 	}
 }

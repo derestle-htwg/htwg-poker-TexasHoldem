@@ -1,35 +1,42 @@
 package de.htwg.se.poker.model;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 
 public class Table extends Observable{
-/*
- * Konstruktor: Anzahl der Spieler
- * 
- * Liste mit den Spielern
- * 
- * Das Deck mit unbenutzten karten
- * 
- * */
-	
+	/*
+	 * Konstruktor: Anzahl der Spieler
+	 * 
+	 * Liste mit den Spielern
+	 * 
+	 * Das Deck mit unbenutzten karten
+	 * 
+	 * */
+
 	public Table(List<Player> inPlayers)
 	{
 		middleCards = new Card[5];
 		this.players = inPlayers;
-		
+		pots = new LinkedList<HashMap<Player,Double>>();
+		pots.add(new HashMap<Player,Double>());
+		dealerPos = 0;
+		playersOut = new LinkedList<Player>();
+		playersAllIn = new LinkedList<Player>();
+
 		for(Player p : players)
 		{
 			addObserver(p.getPlayersInterface());
+			actualPot().put(p, 0.0);
 		}
 	}
-	
+
 	public Deck getMyDeck() {
 		return myDeck;
 	}
-	
+
 	public void setMyDeck(Deck myDeck) {
 		this.myDeck = myDeck;
 	}
@@ -42,106 +49,119 @@ public class Table extends Observable{
 		this.players = players;
 	}
 
-	public Card[] getMiddleCards() {
-		return middleCards;
+	public Card getMiddleCard(int i) {
+		return middleCards[i];
 	}
 
-	public void setMiddleCards(Card[] middleCards) {
-		this.middleCards = middleCards;
+	public void setMiddleCards(int i,Card inCard) {
+		this.middleCards[i] = inCard;
+	}
+
+	public double getPot(Player p)
+	{
+		return actualPot().get(p);
+	}
+
+	public void setPot(Player p, double inPot)
+	{
+		actualPot().put(p,inPot);
 	}
 	
-	/**
-	 * @return the dealer
-	 */
+	public void addPot(Player p, double inPot){
+		actualPot().put(p,actualPot().get(p)+inPot);
+	}
+
+	public void resetForNextRound() {
+
+		for(int i = 0;i<5;i++)
+			middleCards[i] = null;
+
+		setMyDeck(new Deck()); 
+		dealerPos = (dealerPos+1)%players.size();
+
+		playersAllIn = new LinkedList<Player>();
+
+		pots.clear();
+		pots.add(new HashMap<Player, Double>());
+		
+		for(Player p : players)
+		{
+			setPot(p, 0.0);
+		}
+	}
+
+	public List<Player> getPlayersOut() {
+		return playersOut;
+	}
+
+	public void setPlayersOut(List<Player> playersOut) {
+		this.playersOut = playersOut;
+		notifyObservers();
+	}
+
 	public int getDealerPos() {
 		return dealerPos;
 	}
 
-	/**
-	 * @param dealer the dealer to set
-	 */
 	public void setDealerPos(int dealerPos) {
 		this.dealerPos = dealerPos;
 	}
-	
+
 	public void notifyObservers()
 	{
 		setChanged();
 		super.notifyObservers();
 	}
-	
-	public double getPot()
-	{
-		return pot;
-	}
-	
-	public void setPot(double inPot)
-	{
-		pot = inPot;
-	}
-	
-	public double getPlayersPot(Player inPlayer)
-	{
-		return playerPot.get(inPlayer);
-	}
-	
-	public void setPlayersPot(Player inPlayer, double Value)
-	{
-		playerPot.put(inPlayer, Value);
-	}
-	
-	public void resetForNextRound() {
+
+	public void setPlayerAllIn(Player p){
+		if(!PlayerIsAllIn(p))
+			playersAllIn.add(p);
 		
-		for(int i = 0;i<5;i++)
-			middleCards[i] = null;
-		
-		setMyDeck(new Deck()); 
-		dealerPos = (dealerPos+1)%players.size();
-		
-		playerPot = new HashMap<Player, Double>();
-		
-		for(Player p : players)
-		{
-			setPlayersPot(p, 0.0);
+		pots.add(new HashMap<Player, Double>());
+		for(Player p1 :players){
+			if(!PlayerIsAllIn(p1) && !playersOut.contains(p1)){
+				actualPot().put(p1, 0.0);
+			}
 		}
-		
 	}
 
-	/**
-	 * @return the perPlayerPot
-	 */
-	public double getPerPlayerPot() {
-		return perPlayerPot;
+	public boolean PlayerIsAllIn(Player p){
+		return playersAllIn.contains(p);
 	}
 
-	/**
-	 * @param perPlayerPot the perPlayerPot to set
-	 */
-	public void setPerPlayerPot(double perPlayerPot) {
-		this.perPlayerPot = perPlayerPot;
+	public List<Card> getAllMiddleCards() {
+		List<Card> retVal = new LinkedList<Card>();
+		for(Card c : middleCards){
+			if(c != null){
+				retVal.add(c);
+			}
+		}
+		return retVal;
 	}
-
-	/**
-	 * @return the playersOut
-	 */
-	public List<Player> getPlayersOut() {
-		return playersOut;
+	
+	public double getTotalPot() {
+		double totalPot = 0.0;
+		for(Double v : actualPot().values()){
+			totalPot += v;
+		}
+		return totalPot;
 	}
-
-	/**
-	 * @param playersOut the playersOut to set
-	 */
-	public void setPlayersOut(List<Player> playersOut) {
-		this.playersOut = playersOut;
+	
+	private HashMap<Player,Double> actualPot(){
+		return pots.get(pots.size()-1);
+	}
+	
+	public List<HashMap<Player,Double>> getAllPots(){
+		return pots;
 	}
 
 	private Deck myDeck;
 	private Card[] middleCards;
 	private List<Player> players;
 	private int dealerPos;
-	private double pot;
-	private Map<Player,Double> playerPot;
-	private double perPlayerPot;
 	private List<Player> playersOut;
+	private List<Player> playersAllIn;
+	private List<HashMap<Player,Double>> pots;
 	
+
 }

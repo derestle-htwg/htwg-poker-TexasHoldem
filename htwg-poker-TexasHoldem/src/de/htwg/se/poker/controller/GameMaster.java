@@ -1,6 +1,7 @@
 package de.htwg.se.poker.controller;
 
 import java.util.AbstractMap.SimpleEntry;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import de.htwg.se.poker.model.Card;
 import de.htwg.se.poker.model.Player;
 import de.htwg.se.poker.model.Table;
 import de.htwg.se.poker.view.PlayerInterface.action;
+import de.htwg.se.poker.view.PlayerTuiTest;
 
 /*
  * Der Gamemaster Steuert das Spiel.
@@ -18,6 +20,8 @@ import de.htwg.se.poker.view.PlayerInterface.action;
 public class GameMaster {
 	
 	Table myTable;
+	double smallBlind = 5.0;
+	double bigBlind = 10.0;
 	
 	
 	public GameMaster(List<Player> inPlayers){
@@ -28,60 +32,139 @@ public class GameMaster {
 	{
 		int lastBetPos = myTable.getDealerPos();
 		int actualPos = lastBetPos;
-		do
+		double actualBet = 0;
+		int roundActionNo = 0;
+
+		while(actualPos != lastBetPos && (myTable.getPlayers().size() - myTable.getPlayersOut().size()) > 1);
 		{
+			for(Player p :myTable.getPlayers())
+			{
+				if(!myTable.getPlayersOut().contains(p) && !myTable.PlayerIsAllIn(p)){
+					if(myTable.getPot(p) > actualBet)
+						actualBet = myTable.getPot(p); 
+				}
+			}
+			
 			myTable.notifyObservers();
+			double moneyToReachPot = 0.0;
 			Player p = myTable.getPlayers().get(actualPos);
 			List<action> possibleActions = new LinkedList<action>();
-			possibleActions.add(action.call);
-			possibleActions.add(action.fold);
-			possibleActions.add(action.raise);
-			possibleActions.add(action.quitGame);
+			moneyToReachPot = actualBet - myTable.getPot(p);
 			
-			action PlayerAction = p.getPlayersInterface().getPlayerAction(possibleActions,10.0);
+			possibleActions.add(action.fold);
+			possibleActions.add(action.quitGame);
+			possibleActions.add(action.allIn);
+			if(moneyToReachPot < p.getPlayerCapital()){
+				possibleActions.add(action.raise);
+			}
+			if(moneyToReachPot <= p.getPlayerCapital()){
+				possibleActions.add(action.call);
+			}
+			
+			action PlayerAction = p.getPlayersInterface().getPlayerAction(possibleActions,moneyToReachPot);
 			
 			if(PlayerAction == action.quitGame)
 			{
-				myTable.getPlayers().remove(p);
-				if(actualPos < myTable.getDealerPos())
-					myTable.setDealerPos(myTable.getDealerPos()-1);
-				for(Player p2 : myTable.getPlayers())
-					p2.getPlayersInterface().sendInfo("Der Spieler " + p.getName() + " hat das Spiel verlassen");
+				quitPlayer(p);	
 			}
 			else if(PlayerAction == action.fold)
 			{
 				myTable.getPlayersOut().add(p);
+				for(Player p2 : myTable.getPlayers())
+					p2.getPlayersInterface().sendInfo("Der Spieler " + p.getName() + " steigt aus.");
 			}
-			else if(PlayerAction == action.call){}
-			else if(PlayerAction == action.raise){}
+			else if(PlayerAction == action.call){
+				for(Player p2 : myTable.getPlayers())
+					p2.getPlayersInterface().sendInfo("Der Spieler " + p.getName() + " geht mit.");
+				myTable.addPot(p, moneyToReachPot);
+				p.subPlayerCapital(moneyToReachPot);
+			}
+			else if(PlayerAction == action.raise){
+				int value = 0;
+				while(value <= 0 && (moneyToReachPot + value) <= p.getPlayerCapital())
+				{
+					value = (int)p.getPlayersInterface().getActionValue();
+					if(value < moneyToReachPot){
+						p.getPlayersInterface().sendInfo("Fehler, der wert muss größer als 0 sein!");
+					}
+					else if((moneyToReachPot + value) > p.getPlayerCapital()){
+						p.getPlayersInterface().sendInfo("Fehler, eigenes Kapital wurde überschritten!");
+					}
+				}
+				
+				for(Player p2 : myTable.getPlayers())
+					p2.getPlayersInterface().sendInfo("Der Spieler " + p.getName() + " erhöht um " +value);
+				p.subPlayerCapital(moneyToReachPot+value);
+				myTable.addPot(p, moneyToReachPot+value);
+				
+			}else if(PlayerAction == action.allIn){
+				for(Player p2 : myTable.getPlayers())
+					p2.getPlayersInterface().sendInfo("Der Spieler " + p.getName() + " geht all in.");
+				myTable.addPot(p, p.getPlayerCapital());
+				p.subPlayerCapital(p.getPlayerCapital());
+				myTable.setPlayerAllIn(p);
+			}
 			
 			actualPos++;
 			actualPos = actualPos%myTable.getPlayers().size();
 		}
-		while(actualPos != lastBetPos && (myTable.getPlayers().size() - myTable.getPlayersOut().size()) > 1);
+		
+	}
+	
+	private void quitPlayer(Player p)
+	{
+		myTable.getPlayers().remove(p);
+		if(myTable.getPlayers().indexOf(p) < myTable.getDealerPos())
+			myTable.setDealerPos(myTable.getDealerPos()-1);
+		sendPlayerInfoMessages("Der Spieler " + p.getName() + " hat das Spiel verlassen");
 	}
 	
 	public void StartGame(){
 			
 		while(myTable.getPlayers().size() > 1)
-		{
+		{//Spiele solange es Spieler gibt
+			//Tisch herstellen
 			resetTableforNextRound();
+			//Blinds holen
+			getBlind(myTable.getPlayers().get((myTable.getDealerPos()+1)%myTable.getPlayers().size()),smallBlind);
+			getBlind(myTable.getPlayers().get((myTable.getDealerPos()+2)%myTable.getPlayers().size()),bigBlind);
+			
 			roundOne();
 			roundTwo();
 			roundThree();
 		}
 	}
 	
+	private void getBlind(Player p, double Blind)
+	{
+		List<action> possibleActions = new LinkedList<action>();
+		
+		if(p.getPlayerCapital() < Blind){
+			p.getPlayersInterface().sendInfo("Nicht genug Geld für den Blind, du bist raus!");
+			quitPlayer(p);
+		}
+		else{
+			p.getPlayersInterface().sendInfo("Sie müssen den Blind(" + Blind + ") setzen oder aus dem Spiel aussteigen.");
+			possibleActions.add(action.call);
+			possibleActions.add(action.quitGame);
+			action PlayerAction = p.getPlayersInterface().getPlayerAction(possibleActions,Blind);
+			
+			if(PlayerAction == action.quitGame){
+				quitPlayer(p);
+			}
+			else{//set Blind
+				myTable.setPot(p, Blind);
+				p.subPlayerCapital(Blind);
+			}
+		}
+	}
+	
 	private void resetTableforNextRound()
 	{
-		myTable.setPlayersOut(new LinkedList<Player>());
 		myTable.resetForNextRound();
 	}
 	
 	private void roundOne(){
-		myTable.getMiddleCards()[0] = myTable.getMyDeck().deal();
-		myTable.getMiddleCards()[1] = myTable.getMyDeck().deal();
-		myTable.getMiddleCards()[2] = myTable.getMyDeck().deal();
 		for(Player p :myTable.getPlayers())
 		{
 			List<Card> PlayerCards = new LinkedList<Card>();
@@ -90,20 +173,50 @@ public class GameMaster {
 			p.setCards(PlayerCards);
 		}
 		bet();
+		myTable.setMiddleCards(0,myTable.getMyDeck().deal());
+		myTable.setMiddleCards(1,myTable.getMyDeck().deal());
+		myTable.setMiddleCards(2,myTable.getMyDeck().deal());
 	}
 	
 	private void roundTwo(){
-		myTable.getMiddleCards()[3] = myTable.getMyDeck().deal();
+		bet();
+		myTable.setMiddleCards(3,myTable.getMyDeck().deal());
 		myTable.notifyObservers();
 	}
 		
 	private void roundThree()
 	{
-		myTable.getMiddleCards()[4] = myTable.getMyDeck().deal();
+		bet();
+		myTable.setMiddleCards(4,myTable.getMyDeck().deal());
 		myTable.notifyObservers();
 		//showdown
-		
+		for(HashMap<Player, Double> pot : myTable.getAllPots()){
+			List<Player> potPlayers = new LinkedList<Player>();
+			for(Player p : pot.keySet()){
+				if(!myTable.getPlayersOut().contains(p)){
+					potPlayers.add(p);
+				}
+			}
+			
+			List<Player> winners = patternRecognation.ComparePlayers(potPlayers,myTable.getAllMiddleCards());
+			
+			double totalPot = 0.0;
+			for(Player p : potPlayers){
+				totalPot += pot.get(p);
+			}
+			
+			for(Player p : winners)
+			{
+				sendPlayerInfoMessages("Spieler " + p.getName() + " bekommt " + totalPot/((double)winners.size()));
+				p.addPlayerCapital(totalPot/((double)winners.size()));
+			}
+		}
 	}
 	
-
+	private void sendPlayerInfoMessages(String infomsg){
+		for(Player p2 : myTable.getPlayers())
+			p2.getPlayersInterface().sendInfo(infomsg);
+	}
+	
+	
 }

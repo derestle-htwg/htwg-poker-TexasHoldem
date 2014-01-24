@@ -1,5 +1,6 @@
 package de.htwg.se.poker.model;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import de.htwg.se.poker.view.PlayerInterface;
@@ -15,6 +16,7 @@ public class Player {
 	{
 		playerCapital = inPlayerInitCapital;
 		pi = inPi;
+		cards = new LinkedList<Card>();
 	}
 	
 	public PlayerInterface getPlayersInterface()
@@ -25,6 +27,16 @@ public class Player {
 	public double getPlayerCapital()
 	{
 		return playerCapital;
+	}
+	
+	public void addPlayerCapital(double money)
+	{
+		playerCapital += money;
+	}
+	
+	public void subPlayerCapital(double money)
+	{
+		playerCapital -= money;
 	}
 	
 	public void setPlayerInitCapital(double capital)
